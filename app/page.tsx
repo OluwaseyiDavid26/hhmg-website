@@ -1,8 +1,9 @@
 import Hero from "@/components/Home/Hero";
 import WhoWeAre from "@/components/Home/WhoWeAre";
 import SubsidiaryCards from "@/components/Home/SubsidiaryCards";
-// import StatsBar from "@/components/Home/StatsBar";
-// import CTAStrip from "@/components/Home/CTAStrip";
+import RestoredSpotlight from "@/components/Home/RestoredSpotlight";
+import StatsBar from "@/components/Home/StatsBar";
+import CTAStrip from "@/components/Home/CTAStrip";
 
 export default function HomePage() {
   return (
@@ -10,8 +11,9 @@ export default function HomePage() {
       <Hero />
       <WhoWeAre />
       <SubsidiaryCards />
-      {/* <StatsBar />
-      <CTAStrip /> */}
+      <RestoredSpotlight />
+      <StatsBar />
+      <CTAStrip />
     </>
   );
 }
