@@ -1,3 +1,4 @@
+import AboutHeader from "@/components/About/AboutHeader";
 import OurStory from "@/components/About/OurStory";
 import VisionMission from "@/components/About/VisionMission";
 import CoreValues from "@/components/About/CoreValues";
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div>
+      <AboutHeader />
       <OurStory />
       <VisionMission />
       <CoreValues />

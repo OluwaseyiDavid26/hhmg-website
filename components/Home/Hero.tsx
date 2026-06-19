@@ -145,7 +145,7 @@ export default function Hero() {
         </div>
 
         {/* Scroll cue */}
-        <div className="mt-20 flex flex-col items-center gap-3">
+        {/* <div className="mt-20 flex flex-col items-center gap-3">
           <span className="text-white/20 text-[10px] tracking-[0.4em] uppercase">
             Scroll
           </span>
@@ -156,7 +156,7 @@ export default function Hero() {
               style={{ animation: "pulse 2s ease-in-out infinite 0.3s" }}
             />
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* ── Corner frame marks — cinematic letterbox feel ── */}

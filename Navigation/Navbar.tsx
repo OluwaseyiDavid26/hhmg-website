@@ -18,7 +18,7 @@ const navLinks = [
   },
   { label: "Restored", href: "/restored" },
   { label: "Work With Us", href: "/work-with-us" },
-  { label: "Contact", href: "/contact" },
+  //   { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
