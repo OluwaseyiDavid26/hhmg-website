@@ -27,7 +27,7 @@
 //           </span>
 //         </div>
 
-//         <h1 className="font-serif text-6xl sm:text-7xl md:text-[6.5rem] text-white tracking-tight leading-none">
+//         <h1 className="font-display text-6xl sm:text-7xl md:text-[6.5rem] text-white tracking-tight leading-none">
 //           Restored
 //         </h1>
 
@@ -79,7 +79,7 @@
 
 //         {/* Title — revealed by a sweeping spotlight */}
 //         <div className="relative inline-block overflow-hidden">
-//           <h1 className="font-serif text-6xl sm:text-7xl md:text-[6.5rem] text-white tracking-tight leading-none opacity-0 animate-[titleIn_0.3s_ease-out_0.25s_forwards]">
+//           <h1 className="font-display text-6xl sm:text-7xl md:text-[6.5rem] text-white tracking-tight leading-none opacity-0 animate-[titleIn_0.3s_ease-out_0.25s_forwards]">
 //             Restored
 //           </h1>
 //           {/* Light beam sweep */}
@@ -194,7 +194,7 @@ export default function RestoredHeader() {
           </span>
         </div>
 
-        <h1 className="font-serif text-6xl sm:text-7xl md:text-[6.5rem] text-white tracking-tight leading-none opacity-0 animate-[fadeIn_0.35s_ease-out_0.06s_forwards]">
+        <h1 className="font-display text-6xl sm:text-7xl md:text-[6.5rem] text-white tracking-tight leading-none opacity-0 animate-[fadeIn_0.35s_ease-out_0.06s_forwards]">
           Restored
         </h1>
 

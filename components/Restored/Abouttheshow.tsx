@@ -31,7 +31,7 @@
 //         </div>
 
 //         {/* Lead statement */}
-//         <p className="font-serif text-2xl sm:text-3xl text-white leading-snug mb-8">
+//         <p className="font-display text-2xl sm:text-3xl text-white leading-snug mb-8">
 //           Restored is a television testimony series produced by Hand Held Media
 //           &amp; Production Company.
 //         </p>
@@ -45,7 +45,7 @@
 //         {/* Pull quote */}
 //         <div className="relative pl-8 mb-14">
 //           <span
-//             className="absolute left-0 top-0 text-[#F5C400]/30 font-serif text-6xl leading-none select-none"
+//             className="absolute left-0 top-0 text-[#F5C400]/30 font-display text-6xl leading-none select-none"
 //             aria-hidden="true"
 //           >
 //             &ldquo;
@@ -165,7 +165,7 @@ export default function AboutTheShow() {
 
         {/* Lead statement */}
         <p
-          className={`font-serif text-2xl sm:text-3xl text-white leading-snug mb-8 transition-all duration-700 ease-out ${
+          className={`font-display text-2xl sm:text-3xl text-white leading-snug mb-8 transition-all duration-700 ease-out ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
           style={{ transitionDelay: "120ms" }}
@@ -188,7 +188,7 @@ export default function AboutTheShow() {
         {/* Pull quote — mark stamps in, then text follows */}
         <div className="relative pl-8 mb-14">
           <span
-            className={`absolute left-0 top-0 text-[#F5C400]/30 font-serif text-6xl leading-none select-none transition-all duration-500 ${
+            className={`absolute left-0 top-0 text-[#F5C400]/30 font-display text-6xl leading-none select-none transition-all duration-500 ${
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-150"
             }`}
             style={{

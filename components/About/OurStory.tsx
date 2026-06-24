@@ -341,7 +341,7 @@
 //                 initial={{ opacity: 0, scale: 0.5 }}
 //                 animate={isInView ? { opacity: 0.1, scale: 1 } : {}}
 //                 transition={{ delay: 0.6, duration: 0.6 }}
-//                 className="absolute -left-6 -top-4 text-7xl font-serif text-[#F5C400]"
+//                 className="absolute -left-6 -top-4 text-7xl font-display text-[#F5C400]"
 //               >
 //                 "
 //               </motion.span>
@@ -700,7 +700,7 @@ export default function OurStory() {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={isInView ? { opacity: 0.1, scale: 1 } : {}}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="absolute -left-6 -top-4 text-7xl font-serif text-[#F5C400] pointer-events-none"
+                className="absolute -left-6 -top-4 text-7xl font-display text-[#F5C400] pointer-events-none"
               >
                 &ldquo;
               </motion.span>

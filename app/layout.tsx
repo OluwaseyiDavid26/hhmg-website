@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Sora } from "next/font/google";
 import "./globals.css";
 // import Navbar from "@/components/Navigation/Navbar";
 import Navbar from "@/Navigation/Navbar";
 import Footer from "@/Navigation/Footer";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+// const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
+const display = Sora({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "Hand Held Media Group — African Media Infrastructure",
@@ -20,7 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased bg-[#1A1A1A] text-white`}>
+      <body
+        className={`${inter.variable} ${display.variable} antialiased bg-[#1A1A1A] text-white`}
+      >
+        {/* <body className={`${inter.variable} antialiased bg-[#1A1A1A] text-white`}> */}
         <Navbar />
         <main className="pt-16">{children}</main>
         <Footer />

@@ -158,7 +158,7 @@ export default function Rentals() {
               </span>
             </div>
 
-            <h2 className="text-5xl sm:text-6xl lg:text-[64px] font-black text-white leading-[0.95] tracking-tight mb-6">
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-[64px] font-black text-white leading-[0.95] tracking-tight mb-6">
               The right gear
               <br />
               <span

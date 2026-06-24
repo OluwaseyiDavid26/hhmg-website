@@ -32,10 +32,9 @@ body {
   --color-brand-black: #1a1a1a;
   --color-brand-white: #ffffff;
   --color-brand-yellow: #f5c400;
-
-  /* Typography */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-
-  /* Custom spacing / sizing you might need */
   --color-background: #1a1a1a;
+
+  /* Typography — pull from next/font CSS variables, not literals */
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
 }

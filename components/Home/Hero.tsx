@@ -84,7 +84,7 @@ export default function Hero() {
 
         {/* H1 — fades in second */}
         <h1
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px] font-black text-white leading-[1.0] tracking-[-0.02em] mb-8"
+          className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[90px] font-black text-white leading-[1.0] tracking-[-0.02em] mb-8"
           style={{
             opacity: mounted ? 1 : 0,
             transform: mounted ? "translateY(0)" : "translateY(20px)",

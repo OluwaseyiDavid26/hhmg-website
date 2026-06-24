@@ -58,7 +58,7 @@ export default function ProductionCo() {
             </div>
 
             {/* Headline */}
-            <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight mb-6">
+            <h2 className="font-display text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight mb-6">
               Original stories.{" "}
               <span
                 className="text-[#F5C400]"
