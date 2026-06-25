@@ -24,6 +24,30 @@ function useInView(threshold = 0.15) {
   return { ref, inView };
 }
 
+/** Number badge that ticks up from 00 to its target once the card becomes visible. */
+function TickNumber({ target, delay }: { target: number; delay: number }) {
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    const startTimeout = setTimeout(() => {
+      let current = 0;
+      const interval = setInterval(() => {
+        current += 1;
+        setDisplay(current);
+        if (current >= target) clearInterval(interval);
+      }, 70);
+    }, delay * 1000);
+
+    return () => clearTimeout(startTimeout);
+  }, [target, delay]);
+
+  return (
+    <span className="absolute top-5 right-5 text-white/10 text-xs font-mono tabular-nums">
+      0{display}
+    </span>
+  );
+}
+
 const subsidiaries = [
   {
     id: "studios",
@@ -199,68 +223,86 @@ export default function SubsidiaryCards() {
           </Link>
         </div>
 
-        {/* Cards grid — each card staggers in */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {subsidiaries.map((sub, index) => (
-            <div
-              key={sub.id}
-              className="group relative bg-white/[0.03] border border-white/10 rounded-xl p-6 flex flex-col hover:border-[#F5C400]/40 hover:bg-white/[0.06] transition-all duration-300"
-              style={{
-                opacity: inView ? 1 : 0,
-                transform: inView ? "translateY(0)" : "translateY(32px)",
-                transition: `opacity 0.7s ease ${0.4 + index * 0.12}s, transform 0.7s ease ${0.4 + index * 0.12}s`,
-              }}
-            >
-              {/* Card number */}
-              <span className="absolute top-5 right-5 text-white/10 text-xs font-mono">
-                0{index + 1}
-              </span>
-
-              {/* Icon */}
-              <div className="w-10 h-10 rounded-lg bg-[#F5C400]/10 text-[#F5C400] flex items-center justify-center mb-5 group-hover:bg-[#F5C400]/20 transition-colors duration-300">
-                {sub.icon}
-              </div>
-
-              {/* Label */}
-              <h3 className="text-white font-semibold text-sm mb-1 leading-snug">
-                {sub.label}
-              </h3>
-
-              {/* Tagline */}
-              <p className="text-[#F5C400]/80 text-xs font-medium mb-4">
-                {sub.tagline}
-              </p>
-
-              {/* Description */}
-              <p className="text-white/50 text-sm leading-relaxed flex-1 mb-6">
-                {sub.description}
-              </p>
-
-              {/* CTA */}
-              <Link
-                href={sub.href}
-                className="inline-flex items-center gap-2 text-white/50 text-xs font-semibold group-hover:text-[#F5C400] transition-colors duration-200"
+        {/* Cards grid — each card rises in with a subtle 3D tilt, like being set down */}
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+          style={{ perspective: "1200px" }}
+        >
+          {subsidiaries.map((sub, index) => {
+            const delay = 0.4 + index * 0.13;
+            return (
+              <div
+                key={sub.id}
+                className="group relative bg-white/[0.03] border border-white/10 rounded-xl p-6 flex flex-col hover:border-[#F5C400]/40 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300"
+                style={{
+                  opacity: inView ? 1 : 0,
+                  transform: inView
+                    ? "translateY(0) rotateX(0deg) scale(1)"
+                    : "translateY(36px) rotateX(8deg) scale(0.96)",
+                  transformOrigin: "bottom center",
+                  transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s, border-color 0.3s ease, background-color 0.3s ease`,
+                }}
               >
-                {sub.cta}
-                <svg
-                  className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-200"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </Link>
+                {/* Card number — ticks up from 00 */}
+                {inView && (
+                  <TickNumber target={index + 1} delay={delay + 0.35} />
+                )}
 
-              {/* Bottom accent */}
-              <div className="absolute bottom-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[#F5C400]/0 to-transparent group-hover:via-[#F5C400]/40 transition-all duration-300" />
-            </div>
-          ))}
+                {/* Icon — springs in with overshoot, slightly after the card lands */}
+                <div
+                  className="w-10 h-10 rounded-lg bg-[#F5C400]/10 text-[#F5C400] flex items-center justify-center mb-5 group-hover:bg-[#F5C400]/20 group-hover:scale-110 transition-colors duration-300"
+                  style={{
+                    opacity: inView ? 1 : 0,
+                    transform: inView ? "scale(1)" : "scale(0.4)",
+                    transition: `opacity 0.45s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.18}s, transform 0.45s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.18}s`,
+                  }}
+                >
+                  <div className="transition-transform duration-300 group-hover:scale-110">
+                    {sub.icon}
+                  </div>
+                </div>
+
+                {/* Label */}
+                <h3 className="text-white font-semibold text-sm mb-1 leading-snug">
+                  {sub.label}
+                </h3>
+
+                {/* Tagline */}
+                <p className="text-[#F5C400]/80 text-xs font-medium mb-4">
+                  {sub.tagline}
+                </p>
+
+                {/* Description */}
+                <p className="text-white/50 text-sm leading-relaxed flex-1 mb-6">
+                  {sub.description}
+                </p>
+
+                {/* CTA */}
+                <Link
+                  href={sub.href}
+                  className="inline-flex items-center gap-2 text-white/50 text-xs font-semibold group-hover:text-[#F5C400] transition-colors duration-200"
+                >
+                  {sub.cta}
+                  <svg
+                    className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-200"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </Link>
+
+                {/* Bottom accent */}
+                <div className="absolute bottom-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[#F5C400]/0 to-transparent group-hover:via-[#F5C400]/40 transition-all duration-300" />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
