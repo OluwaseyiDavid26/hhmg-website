@@ -6,44 +6,44 @@
 // function useInView(threshold = 0.15) {
 //   const ref = useRef<HTMLDivElement>(null);
 //   const [inView, setInView] = useState(false);
-
 //   useEffect(() => {
-//     const observer = new IntersectionObserver(
-//       ([entry]) => {
-//         if (entry.isIntersecting) {
+//     const obs = new IntersectionObserver(
+//       ([e]) => {
+//         if (e.isIntersecting) {
 //           setInView(true);
-//           observer.disconnect();
+//           obs.disconnect();
 //         }
 //       },
 //       { threshold },
 //     );
-//     if (ref.current) observer.observe(ref.current);
-//     return () => observer.disconnect();
+//     if (ref.current) obs.observe(ref.current);
+//     return () => obs.disconnect();
 //   }, [threshold]);
-
 //   return { ref, inView };
 // }
 
-// /** Number badge that ticks up from 00 to its target once the card becomes visible. */
 // function TickNumber({ target, delay }: { target: number; delay: number }) {
 //   const [display, setDisplay] = useState(0);
-
 //   useEffect(() => {
-//     const startTimeout = setTimeout(() => {
-//       let current = 0;
-//       const interval = setInterval(() => {
-//         current += 1;
-//         setDisplay(current);
-//         if (current >= target) clearInterval(interval);
+//     const t = setTimeout(() => {
+//       let c = 0;
+//       const iv = setInterval(() => {
+//         c += 1;
+//         setDisplay(c);
+//         if (c >= target) clearInterval(iv);
 //       }, 70);
 //     }, delay * 1000);
-
-//     return () => clearTimeout(startTimeout);
+//     return () => clearTimeout(t);
 //   }, [target, delay]);
-
 //   return (
-//     <span className="absolute top-5 right-5 text-white/10 text-xs font-mono tabular-nums">
-//       0{display}
+//     <span
+//       className="absolute bottom-5 right-5 text-[42px] font-black tabular-nums leading-none select-none pointer-events-none"
+//       style={{
+//         color: "rgba(255,255,255,0.04)",
+//         fontVariantNumeric: "tabular-nums",
+//       }}
+//     >
+//       {String(display).padStart(2, "0")}
 //     </span>
 //   );
 // }
@@ -59,7 +59,7 @@
 //     cta: "View Studios",
 //     icon: (
 //       <svg
-//         className="w-6 h-6"
+//         className="w-5 h-5"
 //         fill="none"
 //         viewBox="0 0 24 24"
 //         stroke="currentColor"
@@ -83,7 +83,7 @@
 //     cta: "Browse Equipment",
 //     icon: (
 //       <svg
-//         className="w-6 h-6"
+//         className="w-5 h-5"
 //         fill="none"
 //         viewBox="0 0 24 24"
 //         stroke="currentColor"
@@ -112,7 +112,7 @@
 //     cta: "Join the Platform",
 //     icon: (
 //       <svg
-//         className="w-6 h-6"
+//         className="w-5 h-5"
 //         fill="none"
 //         viewBox="0 0 24 24"
 //         stroke="currentColor"
@@ -136,7 +136,7 @@
 //     cta: "Explore Productions",
 //     icon: (
 //       <svg
-//         className="w-6 h-6"
+//         className="w-5 h-5"
 //         fill="none"
 //         viewBox="0 0 24 24"
 //         stroke="currentColor"
@@ -156,9 +156,30 @@
 //   const { ref, inView } = useInView(0.15);
 
 //   return (
-//     <section className="bg-[#1A1A1A] py-24 px-6" ref={ref}>
-//       <div className="max-w-6xl mx-auto">
-//         {/* Section header */}
+//     <section
+//       className="bg-[#1A1A1A] py-24 px-6 relative overflow-hidden"
+//       ref={ref}
+//     >
+//       {/* Noise texture */}
+//       <div
+//         className="absolute inset-0 pointer-events-none opacity-[0.18]"
+//         style={{
+//           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+//           backgroundSize: "160px 160px",
+//         }}
+//       />
+
+//       {/* Gold left rule */}
+//       <div
+//         className="absolute left-0 top-0 bottom-0 w-px pointer-events-none"
+//         style={{
+//           background:
+//             "linear-gradient(to bottom, transparent 5%, rgba(245,196,0,0.2) 30%, rgba(245,196,0,0.2) 70%, transparent 95%)",
+//         }}
+//       />
+
+//       <div className="max-w-6xl mx-auto relative z-10">
+//         {/* ── Section header ── */}
 //         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
 //           <div>
 //             {/* Eyebrow */}
@@ -174,7 +195,7 @@
 //                 className="h-[2px] bg-[#F5C400]"
 //                 style={{
 //                   width: inView ? "32px" : "0px",
-//                   transition: "width 0.6s ease 0.1s",
+//                   transition: "width 0.7s ease 0.1s",
 //                 }}
 //               />
 //               <span className="text-[#F5C400] text-xs font-semibold tracking-[0.25em] uppercase">
@@ -193,22 +214,30 @@
 //               }}
 //             >
 //               Four Companies.{" "}
-//               <span className="text-white/40">One Ecosystem.</span>
+//               <span
+//                 style={{
+//                   color: "transparent",
+//                   WebkitTextStroke: "1px rgba(255,255,255,0.25)",
+//                 }}
+//               >
+//                 One Ecosystem.
+//               </span>
 //             </h2>
 //           </div>
 
-//           {/* View all link */}
+//           {/* View all */}
 //           <Link
 //             href="/companies"
-//             className="inline-flex items-center gap-2 text-white/50 text-sm hover:text-[#F5C400] transition-colors duration-200 flex-shrink-0"
+//             className="inline-flex items-center gap-2 text-white/40 text-sm hover:text-[#F5C400] flex-shrink-0 group"
 //             style={{
 //               opacity: inView ? 1 : 0,
-//               transition: "opacity 0.8s ease 0.35s",
+//               transition: "opacity 0.8s ease 0.35s, color 0.2s",
 //             }}
 //           >
 //             View All Companies
 //             <svg
-//               className="w-4 h-4"
+//               className="w-4 h-4 group-hover:translate-x-1"
+//               style={{ transition: "transform 0.2s" }}
 //               fill="none"
 //               viewBox="0 0 24 24"
 //               stroke="currentColor"
@@ -223,68 +252,97 @@
 //           </Link>
 //         </div>
 
-//         {/* Cards grid — each card rises in with a subtle 3D tilt, like being set down */}
+//         {/* ── Cards grid ── */}
 //         <div
-//           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+//           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.07]"
 //           style={{ perspective: "1200px" }}
 //         >
-//           {subsidiaries.map((sub, index) => {
-//             const delay = 0.4 + index * 0.13;
+//           {subsidiaries.map((sub, i) => {
+//             const delay = 0.4 + i * 0.12;
 //             return (
 //               <div
 //                 key={sub.id}
-//                 className="group relative bg-white/[0.03] border border-white/10 rounded-xl p-6 flex flex-col hover:border-[#F5C400]/40 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300"
+//                 className="group relative bg-[#1A1A1A] p-7 flex flex-col overflow-hidden"
 //                 style={{
 //                   opacity: inView ? 1 : 0,
 //                   transform: inView
-//                     ? "translateY(0) rotateX(0deg) scale(1)"
-//                     : "translateY(36px) rotateX(8deg) scale(0.96)",
+//                     ? "translateY(0) rotateX(0deg)"
+//                     : "translateY(40px) rotateX(10deg)",
 //                   transformOrigin: "bottom center",
-//                   transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s, border-color 0.3s ease, background-color 0.3s ease`,
+//                   transition: `opacity 0.65s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.65s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
 //                 }}
 //               >
-//                 {/* Card number — ticks up from 00 */}
-//                 {inView && (
-//                   <TickNumber target={index + 1} delay={delay + 0.35} />
-//                 )}
-
-//                 {/* Icon — springs in with overshoot, slightly after the card lands */}
+//                 {/* Gold left rule — slides in on hover */}
 //                 <div
-//                   className="w-10 h-10 rounded-lg bg-[#F5C400]/10 text-[#F5C400] flex items-center justify-center mb-5 group-hover:bg-[#F5C400]/20 group-hover:scale-110 transition-colors duration-300"
+//                   className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#F5C400]"
+//                   style={{
+//                     transform: "scaleY(0)",
+//                     transformOrigin: "top",
+//                     transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
+//                   }}
+//                   ref={(el) => {
+//                     if (!el) return;
+//                     const p = el.parentElement;
+//                     if (!p) return;
+//                     p.addEventListener("mouseenter", () => {
+//                       el.style.transform = "scaleY(1)";
+//                     });
+//                     p.addEventListener("mouseleave", () => {
+//                       el.style.transform = "scaleY(0)";
+//                     });
+//                   }}
+//                 />
+
+//                 {/* Watermark number — bottom right, huge, ghosted */}
+//                 {inView && <TickNumber target={i + 1} delay={delay + 0.3} />}
+
+//                 {/* Icon — gold ring, slight spring on hover */}
+//                 <div
+//                   className="w-11 h-11 rounded-none border border-[#F5C400]/30 text-[#F5C400] flex items-center justify-center mb-6 group-hover:border-[#F5C400]/80 group-hover:bg-[#F5C400]/[0.06]"
 //                   style={{
 //                     opacity: inView ? 1 : 0,
-//                     transform: inView ? "scale(1)" : "scale(0.4)",
-//                     transition: `opacity 0.45s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.18}s, transform 0.45s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.18}s`,
+//                     transform: inView
+//                       ? "scale(1) translateY(0)"
+//                       : "scale(0.5) translateY(6px)",
+//                     transition: `opacity 0.4s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.2}s, transform 0.4s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.2}s, border-color 0.25s, background 0.25s`,
 //                   }}
 //                 >
-//                   <div className="transition-transform duration-300 group-hover:scale-110">
+//                   <div
+//                     className="group-hover:scale-110"
+//                     style={{
+//                       transition:
+//                         "transform 0.25s cubic-bezier(0.34,1.56,0.64,1)",
+//                     }}
+//                   >
 //                     {sub.icon}
 //                   </div>
 //                 </div>
 
 //                 {/* Label */}
-//                 <h3 className="text-white font-semibold text-sm mb-1 leading-snug">
+//                 <h3 className="text-white font-semibold text-sm mb-1.5 leading-snug">
 //                   {sub.label}
 //                 </h3>
 
 //                 {/* Tagline */}
-//                 <p className="text-[#F5C400]/80 text-xs font-medium mb-4">
+//                 <p className="text-[#F5C400]/70 text-xs font-medium mb-4 tracking-wide">
 //                   {sub.tagline}
 //                 </p>
 
 //                 {/* Description */}
-//                 <p className="text-white/50 text-sm leading-relaxed flex-1 mb-6">
+//                 <p className="text-white/45 text-sm leading-relaxed flex-1 mb-7">
 //                   {sub.description}
 //                 </p>
 
 //                 {/* CTA */}
 //                 <Link
 //                   href={sub.href}
-//                   className="inline-flex items-center gap-2 text-white/50 text-xs font-semibold group-hover:text-[#F5C400] transition-colors duration-200"
+//                   className="inline-flex items-center gap-2 text-white/35 text-xs font-semibold group-hover:text-[#F5C400]"
+//                   style={{ transition: "color 0.2s" }}
 //                 >
 //                   {sub.cta}
 //                   <svg
-//                     className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-200"
+//                     className="w-3 h-3 group-hover:translate-x-1"
+//                     style={{ transition: "transform 0.2s" }}
 //                     fill="none"
 //                     viewBox="0 0 24 24"
 //                     stroke="currentColor"
@@ -298,8 +356,37 @@
 //                   </svg>
 //                 </Link>
 
-//                 {/* Bottom accent */}
-//                 <div className="absolute bottom-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[#F5C400]/0 to-transparent group-hover:via-[#F5C400]/40 transition-all duration-300" />
+//                 {/* Bottom glow — only visible on hover */}
+//                 <div
+//                   className="absolute bottom-0 left-0 right-0 h-px"
+//                   style={{
+//                     background:
+//                       "linear-gradient(90deg, transparent 10%, rgba(245,196,0,0) 50%, transparent 90%)",
+//                     transition: "background 0.3s",
+//                   }}
+//                   ref={(el) => {
+//                     if (!el) return;
+//                     const p = el.parentElement;
+//                     if (!p) return;
+//                     p.addEventListener("mouseenter", () => {
+//                       el.style.background =
+//                         "linear-gradient(90deg, transparent 10%, rgba(245,196,0,0.5) 50%, transparent 90%)";
+//                     });
+//                     p.addEventListener("mouseleave", () => {
+//                       el.style.background =
+//                         "linear-gradient(90deg, transparent 10%, rgba(245,196,0,0) 50%, transparent 90%)";
+//                     });
+//                   }}
+//                 />
+
+//                 {/* Corner accent top-right */}
+//                 <div
+//                   className="absolute top-0 right-0 w-6 h-6 pointer-events-none opacity-0 group-hover:opacity-100"
+//                   style={{ transition: "opacity 0.3s" }}
+//                 >
+//                   <div className="absolute top-0 right-0 w-4 h-px bg-[#F5C400]/60" />
+//                   <div className="absolute top-0 right-0 w-px h-4 bg-[#F5C400]/60" />
+//                 </div>
 //               </div>
 //             );
 //           })}
@@ -359,6 +446,396 @@ function TickNumber({ target, delay }: { target: number; delay: number }) {
   );
 }
 
+/* ── Unique card canvas animations ── */
+function useCardCanvas(
+  type: "scanline" | "aperture" | "network" | "broadcast",
+  hovered: boolean,
+) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    const cv = canvasRef.current;
+    if (!cv) return;
+    const parent = cv.parentElement;
+    if (!parent) return;
+    const ctx = cv.getContext("2d")!;
+
+    const resize = () => {
+      cv.width = parent.offsetWidth;
+      cv.height = parent.offsetHeight;
+    };
+    resize();
+
+    const W = () => cv.width;
+    const H = () => cv.height;
+    let t = 0;
+
+    // Network nodes for card 3
+    const nodes = [
+      { x: 0.15, y: 0.3 },
+      { x: 0.6, y: 0.2 },
+      { x: 0.85, y: 0.5 },
+      { x: 0.7, y: 0.8 },
+      { x: 0.3, y: 0.75 },
+      { x: 0.5, y: 0.55 },
+    ];
+    const edges = [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 0],
+      [1, 5],
+      [5, 3],
+    ];
+
+    function draw() {
+      t += hovered ? 0.018 : 0.005;
+      ctx.clearRect(0, 0, W(), H());
+
+      if (type === "scanline") {
+        // Film strip scan lines
+        for (let i = 0; i < 6; i++) {
+          const y = (t * 30 + (i * H()) / 6) % H();
+          const alpha = hovered ? 0.08 : 0.025;
+          const lg = ctx.createLinearGradient(0, y - 14, 0, y + 14);
+          lg.addColorStop(0, "transparent");
+          lg.addColorStop(0.5, `rgba(245,196,0,${alpha})`);
+          lg.addColorStop(1, "transparent");
+          ctx.fillStyle = lg;
+          ctx.fillRect(0, y - 14, W(), 28);
+        }
+      }
+
+      if (type === "aperture") {
+        // Rotating aperture rings
+        const cx = W() * 0.78,
+          cy = H() * 0.62;
+        [55, 85, 115].forEach((r, i) => {
+          ctx.beginPath();
+          ctx.arc(
+            cx,
+            cy,
+            r,
+            t + i * 0.45,
+            t + i * 0.45 + Math.PI * (hovered ? 1.6 : 1.1),
+          );
+          ctx.strokeStyle = `rgba(245,196,0,${hovered ? 0.14 : 0.04})`;
+          ctx.lineWidth = hovered ? 1.5 : 0.6;
+          ctx.stroke();
+        });
+      }
+
+      if (type === "network") {
+        // Network node graph
+        const alpha = hovered ? 0.18 : 0.06;
+        edges.forEach(([a, b]) => {
+          const n1 = nodes[a],
+            n2 = nodes[b];
+          ctx.beginPath();
+          ctx.moveTo(n1.x * W(), n1.y * H());
+          ctx.lineTo(n2.x * W(), n2.y * H());
+          ctx.strokeStyle = `rgba(245,196,0,${alpha * 0.5})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        });
+        nodes.forEach((n, i) => {
+          const pulse = 0.5 + 0.5 * Math.sin(t * 1.5 + i * 1.1);
+          ctx.beginPath();
+          ctx.arc(n.x * W(), n.y * H(), hovered ? 3 : 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(245,196,0,${(alpha * (0.5 + pulse * 0.5)).toFixed(3)})`;
+          ctx.fill();
+        });
+      }
+
+      if (type === "broadcast") {
+        // Broadcast signal waves
+        const cx = W() * 0.12,
+          cy = H() * 0.88;
+        [1, 2, 3, 4, 5].forEach((i) => {
+          const r = i * 26;
+          const alpha = hovered
+            ? Math.max(0, 0.16 - i * 0.028)
+            : Math.max(0, 0.05 - i * 0.009);
+          if (alpha <= 0) return;
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, -Math.PI * 0.65, -Math.PI * 0.05);
+          ctx.strokeStyle = `rgba(245,196,0,${alpha})`;
+          ctx.lineWidth = hovered ? 1.5 : 0.6;
+          ctx.stroke();
+        });
+      }
+
+      rafRef.current = requestAnimationFrame(draw);
+    }
+
+    rafRef.current = requestAnimationFrame(draw);
+    window.addEventListener("resize", resize);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", resize);
+    };
+  }, [type, hovered]);
+
+  return canvasRef;
+}
+
+/* ── Section background canvas ── */
+function SectionBgCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    const cv = canvasRef.current;
+    if (!cv) return;
+    const parent = cv.parentElement!;
+    const ctx = cv.getContext("2d")!;
+    let t = 0;
+
+    const resize = () => {
+      cv.width = parent.offsetWidth;
+      cv.height = parent.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    function draw() {
+      t += 0.007;
+      const W = cv.width,
+        H = cv.height;
+      ctx.clearRect(0, 0, W, H);
+
+      // Breathing gold orb — bottom right
+      const pulse = 0.5 + 0.5 * Math.sin(t * 0.7);
+      const g = ctx.createRadialGradient(
+        W * 0.85,
+        H * 0.88,
+        0,
+        W * 0.85,
+        H * 0.88,
+        W * 0.55,
+      );
+      g.addColorStop(0, `rgba(245,196,0,${(0.04 + pulse * 0.03).toFixed(3)})`);
+      g.addColorStop(1, "transparent");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+
+      // Second orb — top left
+      const g2 = ctx.createRadialGradient(
+        W * 0.08,
+        H * 0.1,
+        0,
+        W * 0.08,
+        H * 0.1,
+        W * 0.3,
+      );
+      g2.addColorStop(
+        0,
+        `rgba(245,196,0,${(0.025 + pulse * 0.015).toFixed(3)})`,
+      );
+      g2.addColorStop(1, "transparent");
+      ctx.fillStyle = g2;
+      ctx.fillRect(0, 0, W, H);
+
+      // Drifting diagonal gold lines
+      const spacing = 44;
+      const offset = (t * 7) % spacing;
+      ctx.strokeStyle = "rgba(245,196,0,0.035)";
+      ctx.lineWidth = 0.5;
+      for (let x = -H + offset; x < W + H; x += spacing) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x + H, H);
+        ctx.stroke();
+      }
+
+      rafRef.current = requestAnimationFrame(draw);
+    }
+
+    rafRef.current = requestAnimationFrame(draw);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 0 }}
+    />
+  );
+}
+
+/* ── Individual card component ── */
+type CardType = "scanline" | "aperture" | "network" | "broadcast";
+
+function SubCard({
+  label,
+  tagline,
+  description,
+  href,
+  cta,
+  icon,
+  index,
+  inView,
+  delay,
+  animType,
+}: {
+  label: string;
+  tagline: string;
+  description: string;
+  href: string;
+  cta: string;
+  icon: React.ReactNode;
+  index: number;
+  inView: boolean;
+  delay: number;
+  animType: CardType;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const cardCanvasRef = useCardCanvas(animType, hovered);
+
+  return (
+    <div
+      className="group relative bg-[#1A1A1A] p-7 flex flex-col overflow-hidden"
+      style={{
+        opacity: inView ? 1 : 0,
+        transform: inView
+          ? "translateY(0) rotateX(0deg)"
+          : "translateY(40px) rotateX(10deg)",
+        transformOrigin: "bottom center",
+        transition: `opacity 0.65s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.65s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Unique card animation canvas */}
+      <canvas
+        ref={cardCanvasRef}
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        style={{
+          zIndex: 0,
+          opacity: hovered ? 1 : 0.4,
+          transition: "opacity 0.5s ease",
+        }}
+      />
+
+      {/* Gold left rule */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#F5C400] pointer-events-none"
+        style={{
+          transform: hovered ? "scaleY(1)" : "scaleY(0)",
+          transformOrigin: "top",
+          transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
+          zIndex: 2,
+        }}
+      />
+
+      {/* Bottom glow */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
+        style={{
+          background: hovered
+            ? "linear-gradient(90deg, transparent, rgba(245,196,0,0.55), transparent)"
+            : "linear-gradient(90deg, transparent, rgba(245,196,0,0), transparent)",
+          transition: "background 0.3s",
+          zIndex: 2,
+        }}
+      />
+
+      {/* Corner accent top-right */}
+      <div
+        className="absolute top-0 right-0 w-5 h-5 pointer-events-none"
+        style={{
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.3s",
+          zIndex: 2,
+        }}
+      >
+        <div className="absolute top-0 right-0 w-4 h-px bg-[#F5C400]/60" />
+        <div className="absolute top-0 right-0 w-px h-4 bg-[#F5C400]/60" />
+      </div>
+
+      {/* Card content */}
+      <div className="relative" style={{ zIndex: 1 }}>
+        {/* Icon */}
+        <div
+          className="w-11 h-11 border border-[#F5C400]/30 text-[#F5C400] flex items-center justify-center mb-6"
+          style={
+            {
+              opacity: inView ? 1 : 0,
+              transform: inView
+                ? "scale(1) translateY(0)"
+                : "scale(0.5) translateY(6px)",
+              transition: `opacity 0.4s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.2}s, transform 0.4s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.2}s`,
+              borderColor: hovered
+                ? "rgba(245,196,0,0.8)"
+                : "rgba(245,196,0,0.3)",
+              background: hovered ? "rgba(245,196,0,0.06)" : "transparent",
+              transition2: "border-color 0.25s, background 0.25s",
+            } as React.CSSProperties
+          }
+        >
+          <div
+            style={{
+              transform: hovered ? "scale(1.12)" : "scale(1)",
+              transition: "transform 0.25s cubic-bezier(0.34,1.56,0.64,1)",
+            }}
+          >
+            {icon}
+          </div>
+        </div>
+
+        <h3 className="text-white font-semibold text-sm mb-1.5 leading-snug">
+          {label}
+        </h3>
+        <p className="text-[#F5C400]/70 text-xs font-medium mb-4 tracking-wide">
+          {tagline}
+        </p>
+        <p className="text-white/45 text-sm leading-relaxed mb-7">
+          {description}
+        </p>
+
+        <Link
+          href={href}
+          className="inline-flex items-center gap-2 text-xs font-semibold"
+          style={{
+            color: hovered ? "#F5C400" : "rgba(255,255,255,0.35)",
+            transition: "color 0.2s",
+          }}
+        >
+          {cta}
+          <svg
+            className="w-3 h-3"
+            style={{
+              transform: hovered ? "translateX(3px)" : "translateX(0)",
+              transition: "transform 0.2s",
+            }}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </Link>
+      </div>
+
+      {/* Watermark number */}
+      {inView && <TickNumber target={index + 1} delay={delay + 0.3} />}
+    </div>
+  );
+}
+
 const subsidiaries = [
   {
     id: "studios",
@@ -368,6 +845,7 @@ const subsidiaries = [
       "Full-service video, audio, and content creation for brands, NGOs, and media organisations. From concept to final cut.",
     href: "/companies#studios",
     cta: "View Studios",
+    animType: "scanline" as CardType,
     icon: (
       <svg
         className="w-5 h-5"
@@ -392,6 +870,7 @@ const subsidiaries = [
       "Professional-grade cameras, lighting, and audio gear for productions of every scale — without the cost of ownership.",
     href: "/companies#rentals",
     cta: "Browse Equipment",
+    animType: "aperture" as CardType,
     icon: (
       <svg
         className="w-5 h-5"
@@ -421,6 +900,7 @@ const subsidiaries = [
       "A membership platform connecting African content creators with tools, training, industry networks, and monetisation pathways.",
     href: "/companies#creators",
     cta: "Join the Platform",
+    animType: "network" as CardType,
     icon: (
       <svg
         className="w-5 h-5"
@@ -445,6 +925,7 @@ const subsidiaries = [
       "The Group's original content and IP subsidiary — developing, producing, and distributing television, digital, and branded content.",
     href: "/companies#production",
     cta: "Explore Productions",
+    animType: "broadcast" as CardType,
     icon: (
       <svg
         className="w-5 h-5"
@@ -456,7 +937,7 @@ const subsidiaries = [
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-3.75 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 8.754 6 9.375v1.5m0-5.25v5.25m0-5.25C6 5.004 6.504 4.5 7.125 4.5h9.75c.621 0 1.125.504 1.125 1.125m1.125 2.625h1.5m-1.5 0A1.125 1.125 0 0118 7.125v1.5m1.5-2.625C19.496 5.004 20 5.508 20 6.129v1.5"
+          d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-3.75 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 8.754 6 9.375v1.5m0-5.25v5.25m0-5.25C6 5.004 6.504 4.5 7.125 4.5h9.75c.621 0 1.125.504 1.125 1.125m1.125 2.625h1.5m-1.5 0A1.125 1.125 0 0118 7.125v1.5"
         />
       </svg>
     ),
@@ -471,29 +952,34 @@ export default function SubsidiaryCards() {
       className="bg-[#1A1A1A] py-24 px-6 relative overflow-hidden"
       ref={ref}
     >
+      {/* Animated section background */}
+      <SectionBgCanvas />
+
       {/* Noise texture */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.18]"
+        className="absolute inset-0 pointer-events-none"
         style={{
+          zIndex: 1,
+          opacity: 0.16,
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
           backgroundSize: "160px 160px",
         }}
       />
 
-      {/* Gold left rule */}
+      {/* Gold left edge rule */}
       <div
         className="absolute left-0 top-0 bottom-0 w-px pointer-events-none"
         style={{
+          zIndex: 1,
           background:
             "linear-gradient(to bottom, transparent 5%, rgba(245,196,0,0.2) 30%, rgba(245,196,0,0.2) 70%, transparent 95%)",
         }}
       />
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        {/* ── Section header ── */}
+      <div className="max-w-6xl mx-auto relative" style={{ zIndex: 2 }}>
+        {/* Section header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
           <div>
-            {/* Eyebrow */}
             <div
               className="inline-flex items-center gap-3 mb-4"
               style={{
@@ -514,7 +1000,6 @@ export default function SubsidiaryCards() {
               </span>
             </div>
 
-            {/* Heading */}
             <h2
               className="font-display text-3xl sm:text-4xl font-bold text-white leading-tight"
               style={{
@@ -536,7 +1021,6 @@ export default function SubsidiaryCards() {
             </h2>
           </div>
 
-          {/* View all */}
           <Link
             href="/companies"
             className="inline-flex items-center gap-2 text-white/40 text-sm hover:text-[#F5C400] flex-shrink-0 group"
@@ -563,144 +1047,26 @@ export default function SubsidiaryCards() {
           </Link>
         </div>
 
-        {/* ── Cards grid ── */}
+        {/* Cards grid */}
         <div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.07]"
           style={{ perspective: "1200px" }}
         >
-          {subsidiaries.map((sub, i) => {
-            const delay = 0.4 + i * 0.12;
-            return (
-              <div
-                key={sub.id}
-                className="group relative bg-[#1A1A1A] p-7 flex flex-col overflow-hidden"
-                style={{
-                  opacity: inView ? 1 : 0,
-                  transform: inView
-                    ? "translateY(0) rotateX(0deg)"
-                    : "translateY(40px) rotateX(10deg)",
-                  transformOrigin: "bottom center",
-                  transition: `opacity 0.65s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.65s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
-                }}
-              >
-                {/* Gold left rule — slides in on hover */}
-                <div
-                  className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#F5C400]"
-                  style={{
-                    transform: "scaleY(0)",
-                    transformOrigin: "top",
-                    transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
-                  }}
-                  ref={(el) => {
-                    if (!el) return;
-                    const p = el.parentElement;
-                    if (!p) return;
-                    p.addEventListener("mouseenter", () => {
-                      el.style.transform = "scaleY(1)";
-                    });
-                    p.addEventListener("mouseleave", () => {
-                      el.style.transform = "scaleY(0)";
-                    });
-                  }}
-                />
-
-                {/* Watermark number — bottom right, huge, ghosted */}
-                {inView && <TickNumber target={i + 1} delay={delay + 0.3} />}
-
-                {/* Icon — gold ring, slight spring on hover */}
-                <div
-                  className="w-11 h-11 rounded-none border border-[#F5C400]/30 text-[#F5C400] flex items-center justify-center mb-6 group-hover:border-[#F5C400]/80 group-hover:bg-[#F5C400]/[0.06]"
-                  style={{
-                    opacity: inView ? 1 : 0,
-                    transform: inView
-                      ? "scale(1) translateY(0)"
-                      : "scale(0.5) translateY(6px)",
-                    transition: `opacity 0.4s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.2}s, transform 0.4s cubic-bezier(0.34,1.56,0.64,1) ${delay + 0.2}s, border-color 0.25s, background 0.25s`,
-                  }}
-                >
-                  <div
-                    className="group-hover:scale-110"
-                    style={{
-                      transition:
-                        "transform 0.25s cubic-bezier(0.34,1.56,0.64,1)",
-                    }}
-                  >
-                    {sub.icon}
-                  </div>
-                </div>
-
-                {/* Label */}
-                <h3 className="text-white font-semibold text-sm mb-1.5 leading-snug">
-                  {sub.label}
-                </h3>
-
-                {/* Tagline */}
-                <p className="text-[#F5C400]/70 text-xs font-medium mb-4 tracking-wide">
-                  {sub.tagline}
-                </p>
-
-                {/* Description */}
-                <p className="text-white/45 text-sm leading-relaxed flex-1 mb-7">
-                  {sub.description}
-                </p>
-
-                {/* CTA */}
-                <Link
-                  href={sub.href}
-                  className="inline-flex items-center gap-2 text-white/35 text-xs font-semibold group-hover:text-[#F5C400]"
-                  style={{ transition: "color 0.2s" }}
-                >
-                  {sub.cta}
-                  <svg
-                    className="w-3 h-3 group-hover:translate-x-1"
-                    style={{ transition: "transform 0.2s" }}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </Link>
-
-                {/* Bottom glow — only visible on hover */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-px"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, transparent 10%, rgba(245,196,0,0) 50%, transparent 90%)",
-                    transition: "background 0.3s",
-                  }}
-                  ref={(el) => {
-                    if (!el) return;
-                    const p = el.parentElement;
-                    if (!p) return;
-                    p.addEventListener("mouseenter", () => {
-                      el.style.background =
-                        "linear-gradient(90deg, transparent 10%, rgba(245,196,0,0.5) 50%, transparent 90%)";
-                    });
-                    p.addEventListener("mouseleave", () => {
-                      el.style.background =
-                        "linear-gradient(90deg, transparent 10%, rgba(245,196,0,0) 50%, transparent 90%)";
-                    });
-                  }}
-                />
-
-                {/* Corner accent top-right */}
-                <div
-                  className="absolute top-0 right-0 w-6 h-6 pointer-events-none opacity-0 group-hover:opacity-100"
-                  style={{ transition: "opacity 0.3s" }}
-                >
-                  <div className="absolute top-0 right-0 w-4 h-px bg-[#F5C400]/60" />
-                  <div className="absolute top-0 right-0 w-px h-4 bg-[#F5C400]/60" />
-                </div>
-              </div>
-            );
-          })}
+          {subsidiaries.map((sub, i) => (
+            <SubCard
+              key={sub.id}
+              label={sub.label}
+              tagline={sub.tagline}
+              description={sub.description}
+              href={sub.href}
+              cta={sub.cta}
+              icon={sub.icon}
+              index={i}
+              inView={inView}
+              delay={0.4 + i * 0.12}
+              animType={sub.animType}
+            />
+          ))}
         </div>
       </div>
     </section>
