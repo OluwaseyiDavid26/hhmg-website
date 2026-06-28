@@ -128,6 +128,7 @@ export default function WorkWithUsHeader() {
     const section = sectionRef.current;
     if (!canvas || !section) return;
 
+    const sectionEl = section as HTMLElement;
     const ctx = canvas.getContext("2d")!;
     let W = 0,
       H = 0;
@@ -139,10 +140,13 @@ export default function WorkWithUsHeader() {
     let nodes: Node[] = [];
 
     function resize() {
+      if (!section) return;
       W = section.offsetWidth;
       H = section.offsetHeight;
-      canvas.width = W;
-      canvas.height = H;
+      // W = section.offsetWidth;
+      // H = section.offsetHeight;
+      canvas!.width = W;
+      canvas!.height = H;
       const cw = W / COLS,
         ch = H / ROWS;
       nodes = [];
