@@ -246,13 +246,14 @@ function BgCanvas() {
   useEffect(() => {
     const cv = canvasRef.current;
     if (!cv) return;
-    const parent = cv.parentElement!;
-    const ctx = cv.getContext("2d")!;
+    const canvas = cv;
+    const parent = canvas.parentElement!;
+    const ctx = canvas.getContext("2d")!;
     let rot = 0;
 
     const resize = () => {
-      cv.width = parent.offsetWidth;
-      cv.height = parent.offsetHeight;
+      canvas.width = parent.offsetWidth;
+      canvas.height = parent.offsetHeight;
     };
     resize();
     window.addEventListener("resize", resize);
@@ -268,8 +269,8 @@ function BgCanvas() {
       gold: boolean;
     };
     const pts: P[] = Array.from({ length: 60 }, () => ({
-      x: Math.random() * cv.width,
-      y: Math.random() * cv.height,
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
       vx: (Math.random() - 0.5) * 0.25,
       vy: (Math.random() - 0.5) * 0.25,
       r: Math.random() * 1.3 + 0.3,
@@ -285,8 +286,8 @@ function BgCanvas() {
       strokeAlpha: number,
       strokeW: number,
     ) {
-      const W = cv.width,
-        H = cv.height;
+      const W = canvas.width,
+        H = canvas.height;
       ctx.save();
       ctx.translate(cx * W, cy * H);
       ctx.rotate(angle);
@@ -302,8 +303,8 @@ function BgCanvas() {
 
     function draw() {
       rot += 0.0018;
-      const W = cv.width,
-        H = cv.height;
+      const W = canvas.width,
+        H = canvas.height;
       ctx.clearRect(0, 0, W, H);
 
       /* Gold orb — right */

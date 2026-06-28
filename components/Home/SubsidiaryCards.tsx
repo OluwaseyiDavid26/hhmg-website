@@ -381,7 +381,7 @@
 
 //                 {/* Corner accent top-right */}
 //                 <div
-//                   className="absolute top-0 right-0 w-6 h-6 pointer-events-none opacity-0 group-hover:opacity-100"
+//                   className="absolute taop-0 right-0 w-6 h-6 pointer-events-none opacity-0 group-hover:opacity-100"
 //                   style={{ transition: "opacity 0.3s" }}
 //                 >
 //                   <div className="absolute top-0 right-0 w-4 h-px bg-[#F5C400]/60" />
@@ -587,20 +587,23 @@ function SectionBgCanvas() {
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    const cv = canvasRef.current;
-    if (!cv) return;
-    const parent = cv.parentElement!;
-    const ctx = cv.getContext("2d")!;
     let t = 0;
 
     const resize = () => {
+      const cv = canvasRef.current;
+      if (!cv) return;
+      const parent = cv.parentElement;
+      if (!parent) return;
       cv.width = parent.offsetWidth;
       cv.height = parent.offsetHeight;
     };
-    resize();
-    window.addEventListener("resize", resize);
 
     function draw() {
+      const cv = canvasRef.current;
+      if (!cv) return;
+      const ctx = cv.getContext("2d");
+      if (!ctx) return;
+
       t += 0.007;
       const W = cv.width,
         H = cv.height;
@@ -653,6 +656,8 @@ function SectionBgCanvas() {
       rafRef.current = requestAnimationFrame(draw);
     }
 
+    resize();
+    window.addEventListener("resize", resize);
     rafRef.current = requestAnimationFrame(draw);
     return () => {
       cancelAnimationFrame(rafRef.current);
