@@ -1,72 +1,330 @@
 // "use client";
 
-// import { useEffect, useState } from "react";
+// import { useEffect, useRef, useState } from "react";
 // import Image from "next/image";
 // import Link from "next/link";
 
 // export default function Hero() {
 //   const [mounted, setMounted] = useState(false);
+//   const canvasRef = useRef<HTMLCanvasElement>(null);
+//   const rafRef = useRef<number>(0);
 
 //   useEffect(() => {
 //     const timer = setTimeout(() => setMounted(true), 150);
 //     return () => clearTimeout(timer);
 //   }, []);
 
+//   /* ── Rotating globe + particles ── */
+//   useEffect(() => {
+//     const canvas = canvasRef.current;
+//     if (!canvas) return;
+//     const ctx = canvas.getContext("2d")!;
+//     let W = 0,
+//       H = 0,
+//       t = 0;
+
+//     const resize = () => {
+//       W = canvas.width = canvas.offsetWidth;
+//       H = canvas.height = canvas.offsetHeight;
+//     };
+//     resize();
+//     window.addEventListener("resize", resize);
+
+//     /* ── Land dot clusters (lat/lng in radians) ── */
+//     type Dot = { lat: number; lng: number; africa: boolean };
+//     const LAND: Dot[] = [];
+
+//     const rand = (min: number, max: number) =>
+//       Math.random() * (max - min) + min;
+//     const deg = (d: number) => (d * Math.PI) / 180;
+
+//     // Africa — gold
+//     for (let i = 0; i < 280; i++)
+//       LAND.push({
+//         lat: deg(rand(-35, 37)),
+//         lng: deg(rand(-18, 52)),
+//         africa: true,
+//       });
+
+//     // Europe
+//     for (let i = 0; i < 110; i++)
+//       LAND.push({
+//         lat: deg(rand(36, 71)),
+//         lng: deg(rand(-10, 40)),
+//         africa: false,
+//       });
+
+//     // North America
+//     for (let i = 0; i < 160; i++)
+//       LAND.push({
+//         lat: deg(rand(15, 72)),
+//         lng: deg(rand(-168, -52)),
+//         africa: false,
+//       });
+
+//     // South America
+//     for (let i = 0; i < 110; i++)
+//       LAND.push({
+//         lat: deg(rand(-55, 12)),
+//         lng: deg(rand(-82, -34)),
+//         africa: false,
+//       });
+
+//     // Asia
+//     for (let i = 0; i < 240; i++)
+//       LAND.push({
+//         lat: deg(rand(1, 75)),
+//         lng: deg(rand(26, 145)),
+//         africa: false,
+//       });
+
+//     // Oceania
+//     for (let i = 0; i < 70; i++)
+//       LAND.push({
+//         lat: deg(rand(-45, -10)),
+//         lng: deg(rand(114, 180)),
+//         africa: false,
+//       });
+
+//     /* ── Particles (left side) ── */
+//     type Particle = {
+//       x: number;
+//       y: number;
+//       vx: number;
+//       vy: number;
+//       r: number;
+//       a: number;
+//       gold: boolean;
+//     };
+//     const PTS: Particle[] = Array.from({ length: 60 }, () => ({
+//       x: Math.random(),
+//       y: Math.random(),
+//       vx: (Math.random() - 0.5) * 0.00025,
+//       vy: (Math.random() - 0.5) * 0.00025,
+//       r: Math.random() * 1.3 + 0.3,
+//       a: Math.random() * 0.35 + 0.06,
+//       gold: Math.random() < 0.28,
+//     }));
+
+//     /* ── Orthographic projection ── */
+//     function project(
+//       lat: number,
+//       lng: number,
+//       rotY: number,
+//       cx: number,
+//       cy: number,
+//       R: number,
+//     ) {
+//       const x2 = Math.cos(lat) * Math.sin(lng - rotY);
+//       const y2 = Math.sin(lat);
+//       const z2 = Math.cos(lat) * Math.cos(lng - rotY);
+//       if (z2 < 0) return null;
+//       return { px: cx + R * x2, py: cy - R * y2, z: z2 };
+//     }
+
+//     function draw() {
+//       t += 0.0016;
+//       ctx.clearRect(0, 0, W, H);
+
+//       /* Gold glow orb — left */
+//       const g1 = ctx.createRadialGradient(
+//         W * 0.15,
+//         H * 0.48,
+//         0,
+//         W * 0.15,
+//         H * 0.48,
+//         W * 0.42,
+//       );
+//       g1.addColorStop(0, "rgba(245,196,0,0.075)");
+//       g1.addColorStop(1, "transparent");
+//       ctx.fillStyle = g1;
+//       ctx.fillRect(0, 0, W, H);
+
+//       /* Globe position — right side */
+//       const R = Math.min(W, H) * 0.4;
+//       const cx = W * 0.72;
+//       const cy = H * 0.5;
+
+//       /* Globe base glow */
+//       const g2 = ctx.createRadialGradient(cx, cy, R * 0.3, cx, cy, R * 1.1);
+//       g2.addColorStop(0, "rgba(245,196,0,0.03)");
+//       g2.addColorStop(1, "transparent");
+//       ctx.fillStyle = g2;
+//       ctx.fillRect(0, 0, W, H);
+
+//       /* Globe circle edge */
+//       ctx.beginPath();
+//       ctx.arc(cx, cy, R, 0, Math.PI * 2);
+//       ctx.strokeStyle = "rgba(245,196,0,0.055)";
+//       ctx.lineWidth = 1;
+//       ctx.stroke();
+
+//       /* Latitude grid lines */
+//       ctx.strokeStyle = "rgba(255,255,255,0.022)";
+//       ctx.lineWidth = 0.5;
+//       for (let la = -60; la <= 60; la += 30) {
+//         ctx.beginPath();
+//         let first = true;
+//         for (let lo = -180; lo <= 180; lo += 3) {
+//           const p = project(deg(la), deg(lo), t, cx, cy, R);
+//           if (!p) {
+//             first = true;
+//             continue;
+//           }
+//           first ? ctx.moveTo(p.px, p.py) : ctx.lineTo(p.px, p.py);
+//           first = false;
+//         }
+//         ctx.stroke();
+//       }
+
+//       /* Longitude grid lines */
+//       for (let lo = -180; lo <= 180; lo += 30) {
+//         ctx.beginPath();
+//         let first = true;
+//         for (let la = -90; la <= 90; la += 3) {
+//           const p = project(deg(la), deg(lo), t, cx, cy, R);
+//           if (!p) {
+//             first = true;
+//             continue;
+//           }
+//           first ? ctx.moveTo(p.px, p.py) : ctx.lineTo(p.px, p.py);
+//           first = false;
+//         }
+//         ctx.stroke();
+//       }
+
+//       /* Land dots */
+//       LAND.forEach((d) => {
+//         const p = project(d.lat, d.lng, t, cx, cy, R);
+//         if (!p) return;
+//         const fade = 0.35 + p.z * 0.65;
+//         ctx.beginPath();
+//         ctx.arc(p.px, p.py, d.africa ? 2.4 : 1.5, 0, Math.PI * 2);
+//         ctx.fillStyle = d.africa
+//           ? `rgba(245,196,0,${(fade * 0.8).toFixed(3)})`
+//           : `rgba(255,255,255,${(fade * 0.22).toFixed(3)})`;
+//         ctx.fill();
+//       });
+
+//       /* Africa glow pulse on top */
+//       const pulse = 0.5 + 0.5 * Math.sin(t * 2.5);
+//       const afCx = cx + R * Math.cos(deg(2)) * Math.sin(deg(20) - t);
+//       const afCy = cy - R * Math.sin(deg(2));
+//       const ag = ctx.createRadialGradient(afCx, afCy, 0, afCx, afCy, R * 0.38);
+//       ag.addColorStop(0, `rgba(245,196,0,${(0.04 + pulse * 0.04).toFixed(3)})`);
+//       ag.addColorStop(1, "transparent");
+//       ctx.fillStyle = ag;
+//       ctx.fillRect(0, 0, W, H);
+
+//       /* Scanline sweep */
+//       const scanY = ((t * 55) % (H + 40)) - 20;
+//       const sg = ctx.createLinearGradient(0, scanY, 0, scanY + 40);
+//       sg.addColorStop(0, "transparent");
+//       sg.addColorStop(0.5, "rgba(245,196,0,0.016)");
+//       sg.addColorStop(1, "transparent");
+//       ctx.fillStyle = sg;
+//       ctx.fillRect(0, scanY, W, 40);
+
+//       /* Floating particles — left half */
+//       PTS.forEach((p) => {
+//         p.x = (p.x + p.vx + 1) % 1;
+//         p.y = (p.y + p.vy + 1) % 1;
+//         const px = p.x * W * 0.52;
+//         const py = p.y * H;
+//         ctx.beginPath();
+//         ctx.arc(px, py, p.r, 0, Math.PI * 2);
+//         ctx.fillStyle = p.gold
+//           ? `rgba(245,196,0,${p.a})`
+//           : `rgba(255,255,255,${p.a * 0.5})`;
+//         ctx.fill();
+//       });
+
+//       rafRef.current = requestAnimationFrame(draw);
+//     }
+
+//     rafRef.current = requestAnimationFrame(draw);
+//     return () => {
+//       cancelAnimationFrame(rafRef.current);
+//       window.removeEventListener("resize", resize);
+//     };
+//   }, []);
+
 //   return (
 //     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0D0D0D]">
-//       {/* LAYER 1 — Base background */}
-//       <div className="absolute inset-0 bg-[#0D0D0D]" />
+//       {/* ── Animated globe canvas ── */}
+//       <canvas
+//         ref={canvasRef}
+//         aria-hidden="true"
+//         className="absolute inset-0 w-full h-full pointer-events-none"
+//         style={{ zIndex: 1 }}
+//       />
 
-//       {/* LAYER 2 — Film grain */}
+//       {/* ── Film grain ── */}
 //       <div
-//         className="absolute inset-0 z-[1] opacity-[0.18] pointer-events-none"
+//         className="absolute inset-0 pointer-events-none"
 //         style={{
+//           zIndex: 2,
+//           opacity: 0.16,
 //           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='1'/%3E%3C/svg%3E")`,
 //           backgroundRepeat: "repeat",
 //           backgroundSize: "200px 200px",
 //         }}
 //       />
 
-//       {/* LAYER 3 — Cinematic light leak top left */}
+//       {/* ── Cinematic light leak — top left ── */}
 //       <div
-//         className="absolute z-[2] pointer-events-none"
+//         className="absolute pointer-events-none"
 //         style={{
+//           zIndex: 3,
 //           top: "-10%",
 //           left: "-5%",
 //           width: "55%",
 //           height: "70%",
 //           background:
-//             "radial-gradient(ellipse at top left, rgba(245,196,0,0.09) 0%, rgba(245,196,0,0.03) 40%, transparent 70%)",
+//             "radial-gradient(ellipse at top left, rgba(245,196,0,0.08) 0%, rgba(245,196,0,0.02) 40%, transparent 70%)",
 //           filter: "blur(40px)",
 //           opacity: mounted ? 1 : 0,
 //           transition: "opacity 3s ease",
 //         }}
 //       />
 
-//       {/* LAYER 4 — Deep vignette */}
+//       {/* ── Deep vignette ── */}
 //       <div
-//         className="absolute inset-0 z-[3] pointer-events-none"
+//         className="absolute inset-0 pointer-events-none"
 //         style={{
+//           zIndex: 4,
 //           background:
-//             "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.85) 100%)",
+//             "radial-gradient(ellipse at 40% 50%, transparent 20%, rgba(0,0,0,0.5) 65%, rgba(0,0,0,0.88) 100%)",
 //         }}
 //       />
 
-//       {/* LAYER 5 — Scan lines */}
+//       {/* ── Horizontal scan lines ── */}
 //       <div
-//         className="absolute inset-0 z-[4] opacity-[0.025] pointer-events-none"
+//         className="absolute inset-0 pointer-events-none"
 //         style={{
+//           zIndex: 5,
+//           opacity: 0.022,
 //           backgroundImage:
 //             "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.8) 2px, rgba(255,255,255,0.8) 3px)",
 //           backgroundSize: "100% 4px",
 //         }}
 //       />
 
-//       {/* LAYER 6 — Bottom fade */}
-//       <div className="absolute bottom-0 left-0 right-0 h-48 z-[5] bg-gradient-to-t from-[#1A1A1A] to-transparent pointer-events-none" />
+//       {/* ── Bottom fade into next section ── */}
+//       <div
+//         className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
+//         style={{
+//           zIndex: 6,
+//           background: "linear-gradient(to top, #1A1A1A, transparent)",
+//         }}
+//       />
 
-//       {/* CONTENT */}
-//       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+//       {/* ── CONTENT ── */}
+//       <div
+//         className="relative max-w-5xl mx-auto px-6 text-center"
+//         style={{ zIndex: 10 }}
+//       >
+//         {/* H1 */}
 //         <h1
 //           className="font-display font-black text-white leading-[1.05] tracking-[-0.02em] mb-8"
 //           style={{
@@ -81,11 +339,6 @@
 //         >
 //           {/* LINE 1 — Africa PNG glyph + "frica Has Stories" */}
 //           <span className="flex items-end justify-center flex-wrap leading-none gap-0">
-//             {/*
-//               PNG has transparent bg — mix-blend-mode: screen makes
-//               the black parts invisible, only the white outline + A shows.
-//               Tweak the width classes below to match your font size.
-//             */}
 //             <span
 //               className="inline-flex items-end flex-shrink-0"
 //               aria-label="A"
@@ -100,14 +353,13 @@
 //                 priority
 //                 className="object-contain object-bottom"
 //                 style={{
-//                   width: "clamp(56px, 7.5vw, 96px)",
+//                   width: "clamp(52px, 7.2vw, 92px)",
 //                   height: "auto",
 //                   mixBlendMode: "screen",
 //                   display: "block",
 //                 }}
 //               />
 //             </span>
-
 //             <span className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px]">
 //               frica Has Stories
 //             </span>
@@ -120,7 +372,7 @@
 //               className="not-italic"
 //               style={{
 //                 color: "#F5C400",
-//                 textShadow: "0 0 80px rgba(245,196,0,0.25)",
+//                 textShadow: "0 0 80px rgba(245,196,0,0.28)",
 //               }}
 //             >
 //               Needs to Hear.
@@ -128,7 +380,7 @@
 //           </span>
 //         </h1>
 
-//         {/* Secondary line */}
+//         {/* Secondary tagline */}
 //         <p
 //           className="text-white/30 text-lg sm:text-xl md:text-2xl font-light tracking-wide mb-6 uppercase"
 //           style={{
@@ -217,10 +469,11 @@
 //         </div>
 //       </div>
 
-//       {/* Corner frame marks */}
+//       {/* ── Corner frame marks ── */}
 //       <div
-//         className="absolute top-8 left-8 z-10 pointer-events-none"
+//         className="absolute top-8 left-8 pointer-events-none"
 //         style={{
+//           zIndex: 10,
 //           opacity: mounted ? 1 : 0,
 //           transition: "opacity 1.2s ease 2.6s",
 //         }}
@@ -229,8 +482,9 @@
 //         <div className="w-[1px] h-6 bg-white/20" />
 //       </div>
 //       <div
-//         className="absolute top-8 right-8 z-10 pointer-events-none flex flex-col items-end"
+//         className="absolute top-8 right-8 pointer-events-none flex flex-col items-end"
 //         style={{
+//           zIndex: 10,
 //           opacity: mounted ? 1 : 0,
 //           transition: "opacity 1.2s ease 2.6s",
 //         }}
@@ -239,8 +493,9 @@
 //         <div className="w-[1px] h-6 bg-white/20 ml-auto" />
 //       </div>
 //       <div
-//         className="absolute bottom-8 left-8 z-10 pointer-events-none flex flex-col justify-end"
+//         className="absolute bottom-8 left-8 pointer-events-none flex flex-col justify-end"
 //         style={{
+//           zIndex: 10,
 //           opacity: mounted ? 1 : 0,
 //           transition: "opacity 1.2s ease 2.6s",
 //         }}
@@ -249,8 +504,9 @@
 //         <div className="w-6 h-[1px] bg-white/20" />
 //       </div>
 //       <div
-//         className="absolute bottom-8 right-8 z-10 pointer-events-none flex flex-col items-end justify-end"
+//         className="absolute bottom-8 right-8 pointer-events-none flex flex-col items-end justify-end"
 //         style={{
+//           zIndex: 10,
 //           opacity: mounted ? 1 : 0,
 //           transition: "opacity 1.2s ease 2.6s",
 //         }}
@@ -278,11 +534,12 @@ export default function Hero() {
     return () => clearTimeout(timer);
   }, []);
 
-  /* ── Rotating globe + particles ── */
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d")!;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const ctx = context;
     let W = 0,
       H = 0,
       t = 0;
@@ -294,55 +551,42 @@ export default function Hero() {
     resize();
     window.addEventListener("resize", resize);
 
-    /* ── Land dot clusters (lat/lng in radians) ── */
     type Dot = { lat: number; lng: number; africa: boolean };
     const LAND: Dot[] = [];
-
     const rand = (min: number, max: number) =>
       Math.random() * (max - min) + min;
     const deg = (d: number) => (d * Math.PI) / 180;
 
-    // Africa — gold
     for (let i = 0; i < 280; i++)
       LAND.push({
         lat: deg(rand(-35, 37)),
         lng: deg(rand(-18, 52)),
         africa: true,
       });
-
-    // Europe
     for (let i = 0; i < 110; i++)
       LAND.push({
         lat: deg(rand(36, 71)),
         lng: deg(rand(-10, 40)),
         africa: false,
       });
-
-    // North America
     for (let i = 0; i < 160; i++)
       LAND.push({
         lat: deg(rand(15, 72)),
         lng: deg(rand(-168, -52)),
         africa: false,
       });
-
-    // South America
     for (let i = 0; i < 110; i++)
       LAND.push({
         lat: deg(rand(-55, 12)),
         lng: deg(rand(-82, -34)),
         africa: false,
       });
-
-    // Asia
     for (let i = 0; i < 240; i++)
       LAND.push({
         lat: deg(rand(1, 75)),
         lng: deg(rand(26, 145)),
         africa: false,
       });
-
-    // Oceania
     for (let i = 0; i < 70; i++)
       LAND.push({
         lat: deg(rand(-45, -10)),
@@ -350,7 +594,6 @@ export default function Hero() {
         africa: false,
       });
 
-    /* ── Particles (left side) ── */
     type Particle = {
       x: number;
       y: number;
@@ -370,7 +613,6 @@ export default function Hero() {
       gold: Math.random() < 0.28,
     }));
 
-    /* ── Orthographic projection ── */
     function project(
       lat: number,
       lng: number,
@@ -390,7 +632,6 @@ export default function Hero() {
       t += 0.0016;
       ctx.clearRect(0, 0, W, H);
 
-      /* Gold glow orb — left */
       const g1 = ctx.createRadialGradient(
         W * 0.15,
         H * 0.48,
@@ -404,26 +645,22 @@ export default function Hero() {
       ctx.fillStyle = g1;
       ctx.fillRect(0, 0, W, H);
 
-      /* Globe position — right side */
       const R = Math.min(W, H) * 0.4;
       const cx = W * 0.72;
       const cy = H * 0.5;
 
-      /* Globe base glow */
       const g2 = ctx.createRadialGradient(cx, cy, R * 0.3, cx, cy, R * 1.1);
       g2.addColorStop(0, "rgba(245,196,0,0.03)");
       g2.addColorStop(1, "transparent");
       ctx.fillStyle = g2;
       ctx.fillRect(0, 0, W, H);
 
-      /* Globe circle edge */
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.strokeStyle = "rgba(245,196,0,0.055)";
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      /* Latitude grid lines */
       ctx.strokeStyle = "rgba(255,255,255,0.022)";
       ctx.lineWidth = 0.5;
       for (let la = -60; la <= 60; la += 30) {
@@ -441,7 +678,6 @@ export default function Hero() {
         ctx.stroke();
       }
 
-      /* Longitude grid lines */
       for (let lo = -180; lo <= 180; lo += 30) {
         ctx.beginPath();
         let first = true;
@@ -457,7 +693,6 @@ export default function Hero() {
         ctx.stroke();
       }
 
-      /* Land dots */
       LAND.forEach((d) => {
         const p = project(d.lat, d.lng, t, cx, cy, R);
         if (!p) return;
@@ -470,7 +705,6 @@ export default function Hero() {
         ctx.fill();
       });
 
-      /* Africa glow pulse on top */
       const pulse = 0.5 + 0.5 * Math.sin(t * 2.5);
       const afCx = cx + R * Math.cos(deg(2)) * Math.sin(deg(20) - t);
       const afCy = cy - R * Math.sin(deg(2));
@@ -480,7 +714,6 @@ export default function Hero() {
       ctx.fillStyle = ag;
       ctx.fillRect(0, 0, W, H);
 
-      /* Scanline sweep */
       const scanY = ((t * 55) % (H + 40)) - 20;
       const sg = ctx.createLinearGradient(0, scanY, 0, scanY + 40);
       sg.addColorStop(0, "transparent");
@@ -489,7 +722,6 @@ export default function Hero() {
       ctx.fillStyle = sg;
       ctx.fillRect(0, scanY, W, 40);
 
-      /* Floating particles — left half */
       PTS.forEach((p) => {
         p.x = (p.x + p.vx + 1) % 1;
         p.y = (p.y + p.vy + 1) % 1;
@@ -515,7 +747,6 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0D0D0D]">
-      {/* ── Animated globe canvas ── */}
       <canvas
         ref={canvasRef}
         aria-hidden="true"
@@ -523,7 +754,6 @@ export default function Hero() {
         style={{ zIndex: 1 }}
       />
 
-      {/* ── Film grain ── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -535,7 +765,6 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Cinematic light leak — top left ── */}
       <div
         className="absolute pointer-events-none"
         style={{
@@ -552,7 +781,6 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Deep vignette ── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -562,7 +790,6 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Horizontal scan lines ── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -574,7 +801,6 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Bottom fade into next section ── */}
       <div
         className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
         style={{
@@ -583,12 +809,11 @@ export default function Hero() {
         }}
       />
 
-      {/* ── CONTENT ── */}
+      {/* CONTENT */}
       <div
         className="relative max-w-5xl mx-auto px-6 text-center"
         style={{ zIndex: 10 }}
       >
-        {/* H1 */}
         <h1
           className="font-display font-black text-white leading-[1.05] tracking-[-0.02em] mb-8"
           style={{
@@ -601,31 +826,40 @@ export default function Hero() {
               "opacity 1.4s cubic-bezier(0.16,1,0.3,1) 0.55s, transform 1.4s cubic-bezier(0.16,1,0.3,1) 0.55s, filter 1.4s cubic-bezier(0.16,1,0.3,1) 0.55s",
           }}
         >
-          {/* LINE 1 — Africa PNG glyph + "frica Has Stories" */}
-          <span className="flex items-end justify-center flex-wrap leading-none gap-0">
-            <span
-              className="inline-flex items-end flex-shrink-0"
-              aria-label="A"
-              style={{ marginRight: "-0.01em", marginBottom: "0.01em" }}
-            >
-              <Image
-                src="/IMG-20260627-WA0036 copy copy.png"
-                alt=""
-                aria-hidden="true"
-                width={96}
-                height={117}
-                priority
-                className="object-contain object-bottom"
-                style={{
-                  width: "clamp(52px, 7.2vw, 92px)",
-                  height: "auto",
-                  mixBlendMode: "screen",
-                  display: "block",
-                }}
-              />
+          {/* LINE 1 */}
+          <span className="flex items-end justify-center flex-wrap leading-none">
+            {/* ── Africa A + "frica" locked together — never splits ── */}
+            <span className="inline-flex items-end whitespace-nowrap">
+              <span
+                className="inline-flex items-end flex-shrink-0"
+                aria-label="A"
+                style={{ marginRight: "-0.01em", marginBottom: "0.01em" }}
+              >
+                <Image
+                  src="/IMG-20260627-WA0036 copy copy.png"
+                  alt=""
+                  aria-hidden="true"
+                  width={96}
+                  height={117}
+                  priority
+                  className="object-contain object-bottom"
+                  style={{
+                    /* smaller on mobile so A+frica fits on one line */
+                    width: "clamp(36px, 7.2vw, 92px)",
+                    height: "auto",
+                    mixBlendMode: "screen",
+                    display: "block",
+                  }}
+                />
+              </span>
+              <span className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px]">
+                frica
+              </span>
             </span>
+
+            {/* "Has Stories" can wrap on its own line on very small screens */}
             <span className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px]">
-              frica Has Stories
+              &nbsp;Has Stories
             </span>
           </span>
 
@@ -733,7 +967,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Corner frame marks ── */}
+      {/* Corner frame marks */}
       <div
         className="absolute top-8 left-8 pointer-events-none"
         style={{
