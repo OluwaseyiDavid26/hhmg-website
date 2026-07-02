@@ -1,177 +1,6 @@
 // "use client";
 
 // import Link from "next/link";
-// import { motion, Variants } from "framer-motion";
-
-// const SEGMENTS = [
-//   {
-//     id: "brands",
-//     index: "01",
-//     tag: "HH Media Studios",
-//     title: "For Brands & Organisations",
-//     copy: "Need video, photography, or branded content? HH Media Studios is your production partner.",
-//     cta: "Start a Project",
-//     href: "/contact?type=production",
-//   },
-//   {
-//     id: "filmmakers",
-//     index: "02",
-//     tag: "HH Media Rentals",
-//     title: "For Filmmakers & Productions",
-//     copy: "Looking for professional equipment without the cost of ownership? HH Media Rentals has your kit.",
-//     cta: "Browse Equipment",
-//     href: "/companies/rentals",
-//   },
-//   {
-//     id: "creators",
-//     index: "03",
-//     tag: "HH Creators Platform",
-//     title: "For Content Creators",
-//     copy: "Ready to level up? Join the HH Creators Platform for training, community, and opportunities.",
-//     cta: "Join the Platform",
-//     href: "/companies/creators-platform",
-//   },
-//   {
-//     id: "investors",
-//     index: "04",
-//     tag: "Hand Held Media Group",
-//     title: "For Investors & Partners",
-//     copy: "Interested in the HHMG opportunity? We are open to strategic partnerships and investor conversations.",
-//     cta: "Request a Pitch Deck",
-//     href: "/contact?type=investment",
-//   },
-// ];
-
-// const containerVariants: Variants = {
-//   hidden: { opacity: 0 },
-//   visible: {
-//     opacity: 1,
-//     transition: {
-//       staggerChildren: 0.15,
-//       delayChildren: 0.1,
-//     },
-//   },
-// };
-
-// const cardVariants: Variants = {
-//   hidden: {
-//     opacity: 0,
-//     y: 40,
-//     scale: 0.97,
-//   },
-//   visible: {
-//     opacity: 1,
-//     y: 0,
-//     scale: 1,
-//     transition: {
-//       type: "spring",
-//       stiffness: 300,
-//       damping: 25,
-//       duration: 0.5,
-//     },
-//   },
-// };
-
-// export default function AudienceSegments() {
-//   return (
-//     <section className="bg-[#1A1A1A] py-20 sm:py-24 px-6">
-//       <motion.div
-//         className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6"
-//         variants={containerVariants}
-//         initial="hidden"
-//         whileInView="visible"
-//         viewport={{ once: true, margin: "-50px" }}
-//       >
-//         {SEGMENTS.map((segment) => (
-//           <motion.div
-//             key={segment.id}
-//             id={segment.id}
-//             variants={cardVariants}
-//             whileHover={{
-//               y: -6,
-//               scale: 1.01,
-//               borderColor: "rgba(245, 196, 0, 0.3)",
-//               backgroundColor: "rgba(255, 255, 255, 0.03)",
-//               transition: {
-//                 type: "spring",
-//                 stiffness: 400,
-//                 damping: 20,
-//               },
-//             }}
-//             className="group relative rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 sm:p-9 scroll-mt-28"
-//           >
-//             <div className="flex items-start justify-between mb-6">
-//               <motion.span
-//                 initial={{ opacity: 0, x: -10 }}
-//                 whileInView={{ opacity: 1, x: 0 }}
-//                 transition={{ delay: 0.2 }}
-//                 className="text-[#F5C400] text-[11px] font-semibold tracking-[0.2em] uppercase"
-//               >
-//                 {segment.tag}
-//               </motion.span>
-//               <motion.span
-//                 whileHover={{ scale: 1.1, opacity: 0.5 }}
-//                 className="text-white/20 text-sm font-semibold tabular-nums"
-//               >
-//                 {segment.index}
-//               </motion.span>
-//             </div>
-
-//             <motion.h3
-//               initial={{ opacity: 0 }}
-//               whileInView={{ opacity: 1 }}
-//               transition={{ delay: 0.1 }}
-//               className="text-white text-xl sm:text-2xl font-bold tracking-tight mb-3"
-//             >
-//               {segment.title}
-//             </motion.h3>
-
-//             <motion.p
-//               initial={{ opacity: 0 }}
-//               whileInView={{ opacity: 1 }}
-//               transition={{ delay: 0.15 }}
-//               className="text-white/60 text-sm sm:text-base leading-relaxed mb-8"
-//             >
-//               {segment.copy}
-//             </motion.p>
-
-//             <motion.div
-//               whileHover={{ x: 6 }}
-//               transition={{ type: "spring", stiffness: 400 }}
-//             >
-//               <Link
-//                 href={segment.href}
-//                 className="inline-flex items-center gap-2 text-[#F5C400] text-sm font-semibold transition-colors duration-200 hover:text-white"
-//               >
-//                 {segment.cta}
-//                 <motion.svg
-//                   className="w-4 h-4"
-//                   fill="none"
-//                   viewBox="0 0 24 24"
-//                   stroke="currentColor"
-//                   strokeWidth={2.5}
-//                   aria-hidden="true"
-//                   whileHover={{ x: 4 }}
-//                   transition={{ type: "spring", stiffness: 400 }}
-//                 >
-//                   <path
-//                     strokeLinecap="round"
-//                     strokeLinejoin="round"
-//                     d="M17 8l4 4m0 0l-4 4m4-4H3"
-//                   />
-//                 </motion.svg>
-//               </Link>
-//             </motion.div>
-//           </motion.div>
-//         ))}
-//       </motion.div>
-//     </section>
-//   );
-// }
-
-// "use client";
-
-// import Link from "next/link";
 // import { useEffect, useRef, useState } from "react";
 
 // function useInView(threshold = 0.1) {
@@ -237,6 +66,9 @@
 //     }));
 
 //     function draw() {
+//       // Check if cv and ctx still exist before drawing
+//       if (!cv || !ctx) return;
+
 //       t += 0.009;
 //       const W = cv.width,
 //         H = cv.height;
@@ -574,8 +406,18 @@ function useInView(threshold = 0.1) {
   return { ref, inView };
 }
 
-/* ── Background: four converging signal paths from corners to center ── */
-function BgCanvas({ active }: { active: boolean }) {
+/* ── Background: four converging signal paths from corners to center ──
+   Corner order (0..3) is top-left, top-right, bottom-left, bottom-right,
+   which lines up with the 2x2 card grid below. Hovering a card boosts
+   that exact corner's beam, so the background reacts to which audience
+   you're looking at instead of just running ambient in the back. */
+function BgCanvas({
+  active,
+  hoverIndexRef,
+}: {
+  active: boolean;
+  hoverIndexRef: React.RefObject<number | null>;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
 
@@ -588,10 +430,18 @@ function BgCanvas({ active }: { active: boolean }) {
     const ctx = cv.getContext("2d");
     if (!ctx) return;
 
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let t = 0;
     const resize = () => {
-      cv.width = parent.offsetWidth;
-      cv.height = parent.offsetHeight;
+      cv.width = parent.offsetWidth * dpr;
+      cv.height = parent.offsetHeight * dpr;
+      cv.style.width = `${parent.offsetWidth}px`;
+      cv.style.height = `${parent.offsetHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
@@ -605,9 +455,11 @@ function BgCanvas({ active }: { active: boolean }) {
       a: number;
       gold: boolean;
     };
+    const W0 = () => cv.width / dpr;
+    const H0 = () => cv.height / dpr;
     const particles: Particle[] = Array.from({ length: 32 }, () => ({
-      x: Math.random() * cv.width,
-      y: Math.random() * cv.height,
+      x: Math.random() * W0(),
+      y: Math.random() * H0(),
       vx: (Math.random() - 0.5) * 0.14,
       vy: (Math.random() - 0.5) * 0.14,
       r: Math.random() * 1.1 + 0.3,
@@ -615,13 +467,12 @@ function BgCanvas({ active }: { active: boolean }) {
       gold: Math.random() < 0.28,
     }));
 
-    function draw() {
-      // Check if cv and ctx still exist before drawing
+    function frame() {
       if (!cv || !ctx) return;
 
       t += 0.009;
-      const W = cv.width,
-        H = cv.height;
+      const W = W0(),
+        H = H0();
       const cx = W / 2,
         cy = H / 2;
       ctx.clearRect(0, 0, W, H);
@@ -644,22 +495,26 @@ function BgCanvas({ active }: { active: boolean }) {
       ctx.fillStyle = gC;
       ctx.fillRect(0, 0, W, H);
 
-      /* Four corners converging toward center — like 4 audience paths meeting */
       const corners = [
         { x: 0, y: 0 },
         { x: W, y: 0 },
         { x: 0, y: H },
         { x: W, y: H },
       ];
+      const boostIdx = hoverIndexRef.current;
 
       corners.forEach((corner, i) => {
-        const travel = (t * 0.12 + i * 0.25) % 1;
+        const boosted = i === boostIdx;
+        const speed = boosted ? 0.34 : 0.12;
+        const travel = (t * speed + i * 0.25) % 1;
         const px = corner.x + (cx - corner.x) * travel;
         const py = corner.y + (cy - corner.y) * travel;
 
-        /* faint static guide line */
-        ctx.strokeStyle = "rgba(245,196,0,0.035)";
-        ctx.lineWidth = 0.6;
+        /* guide line — brightens for the boosted corner */
+        ctx.strokeStyle = boosted
+          ? "rgba(245,196,0,0.14)"
+          : "rgba(245,196,0,0.035)";
+        ctx.lineWidth = boosted ? 0.9 : 0.6;
         ctx.beginPath();
         ctx.moveTo(corner.x, corner.y);
         ctx.lineTo(cx, cy);
@@ -668,18 +523,23 @@ function BgCanvas({ active }: { active: boolean }) {
         /* traveling pulse dot along the line */
         const fade =
           travel < 0.1 ? travel / 0.1 : travel > 0.85 ? (1 - travel) / 0.15 : 1;
+        const dotR = boosted ? 3.2 : 2.2;
         ctx.beginPath();
-        ctx.arc(px, py, 2.2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(245,196,0,${(fade * 0.55).toFixed(3)})`;
+        ctx.arc(px, py, dotR, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(245,196,0,${(fade * (boosted ? 0.9 : 0.55)).toFixed(3)})`;
         ctx.fill();
 
         /* trailing glow */
-        const gT = ctx.createRadialGradient(px, py, 0, px, py, 18);
-        gT.addColorStop(0, `rgba(245,196,0,${(fade * 0.12).toFixed(3)})`);
+        const glowR = boosted ? 30 : 18;
+        const gT = ctx.createRadialGradient(px, py, 0, px, py, glowR);
+        gT.addColorStop(
+          0,
+          `rgba(245,196,0,${(fade * (boosted ? 0.22 : 0.12)).toFixed(3)})`,
+        );
         gT.addColorStop(1, "transparent");
         ctx.fillStyle = gT;
         ctx.beginPath();
-        ctx.arc(px, py, 18, 0, Math.PI * 2);
+        ctx.arc(px, py, glowR, 0, Math.PI * 2);
         ctx.fill();
       });
 
@@ -704,15 +564,21 @@ function BgCanvas({ active }: { active: boolean }) {
       ctx.fillStyle = sg;
       ctx.fillRect(0, scanY - 10, W, 20);
 
-      rafRef.current = requestAnimationFrame(draw);
+      rafRef.current = requestAnimationFrame(frame);
     }
 
-    rafRef.current = requestAnimationFrame(draw);
+    if (prefersReducedMotion) {
+      // Draw one clean static frame instead of looping.
+      frame();
+    } else {
+      rafRef.current = requestAnimationFrame(frame);
+    }
+
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", resize);
     };
-  }, [active]);
+  }, [active, hoverIndexRef]);
 
   return (
     <canvas
@@ -727,7 +593,7 @@ function BgCanvas({ active }: { active: boolean }) {
 const SEGMENTS = [
   {
     id: "brands",
-    index: "01",
+    channel: "CH \u00B7 01",
     tag: "HH Media Studios",
     title: "For Brands & Organisations",
     copy: "Need video, photography, or branded content? HH Media Studios is your production partner.",
@@ -736,7 +602,7 @@ const SEGMENTS = [
   },
   {
     id: "filmmakers",
-    index: "02",
+    channel: "CH \u00B7 02",
     tag: "HH Media Rentals",
     title: "For Filmmakers & Productions",
     copy: "Looking for professional equipment without the cost of ownership? HH Media Rentals has your kit.",
@@ -745,7 +611,7 @@ const SEGMENTS = [
   },
   {
     id: "creators",
-    index: "03",
+    channel: "CH \u00B7 03",
     tag: "HH Creators Platform",
     title: "For Content Creators",
     copy: "Ready to level up? Join the HH Creators Platform for training, community, and opportunities.",
@@ -754,7 +620,7 @@ const SEGMENTS = [
   },
   {
     id: "investors",
-    index: "04",
+    channel: "CH \u00B7 04",
     tag: "Hand Held Media Group",
     title: "For Investors & Partners",
     copy: "Interested in the HHMG opportunity? We are open to strategic partnerships and investor conversations.",
@@ -767,13 +633,20 @@ function SegmentCard({
   segment,
   index,
   inView,
+  onHoverChange,
 }: {
   segment: (typeof SEGMENTS)[number];
   index: number;
   inView: boolean;
+  onHoverChange: (hovered: boolean) => void;
 }) {
   const [hovered, setHovered] = useState(false);
   const delay = 0.15 + index * 0.13;
+
+  const setHover = (v: boolean) => {
+    setHovered(v);
+    onHoverChange(v);
+  };
 
   return (
     <div
@@ -794,8 +667,8 @@ function SegmentCard({
           ? "transform 0.35s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, background 0.3s"
           : `opacity 0.5s cubic-bezier(0.34,1.56,0.64,1) ${delay}s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) ${delay}s`,
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
       {/* Corner accent that draws in on hover */}
       <span
@@ -825,19 +698,19 @@ function SegmentCard({
           {segment.tag}
         </span>
         <span
-          className="text-white/20 text-sm font-semibold tabular-nums"
+          className="text-white/25 text-[11px] font-mono tracking-wider tabular-nums"
           style={{
-            transform: hovered ? "scale(1.1)" : "scale(1)",
-            opacity: hovered ? 0.5 : 0.2,
+            transform: hovered ? "scale(1.08)" : "scale(1)",
+            opacity: hovered ? 0.7 : 0.25,
             transition: "transform 0.25s, opacity 0.25s",
           }}
         >
-          {segment.index}
+          {segment.channel}
         </span>
       </div>
 
       <h3
-        className="text-white text-xl sm:text-2xl font-bold tracking-tight mb-3"
+        className="font-display text-white text-xl sm:text-2xl font-bold tracking-tight mb-3"
         style={{
           opacity: inView ? 1 : 0,
           transition: `opacity 0.6s ease ${delay + 0.1}s`,
@@ -893,6 +766,7 @@ function SegmentCard({
 
 export default function AudienceSegments() {
   const { ref, inView } = useInView(0.1);
+  const hoverIndexRef = useRef<number | null>(null);
 
   return (
     <section
@@ -900,7 +774,7 @@ export default function AudienceSegments() {
       className="relative bg-[#1A1A1A] py-20 sm:py-24 px-6 overflow-hidden"
     >
       {/* Converging signal background */}
-      <BgCanvas active={inView} />
+      <BgCanvas active={inView} hoverIndexRef={hoverIndexRef} />
 
       {/* Noise */}
       <div
@@ -913,6 +787,21 @@ export default function AudienceSegments() {
         }}
       />
 
+      {/* Section eyebrow + lead — gives the four cards a frame to sit in */}
+      <div
+        className="relative max-w-5xl mx-auto mb-12 sm:mb-14"
+        style={{ zIndex: 10 }}
+      >
+        <div
+          className="inline-flex items-center gap-2 mb-5"
+          style={{
+            opacity: inView ? 1 : 0,
+            transform: inView ? "translateY(0)" : "translateY(8px)",
+            transition: "opacity 0.5s ease, transform 0.5s ease",
+          }}
+        ></div>
+      </div>
+
       <div
         className="relative max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6"
         style={{ zIndex: 10 }}
@@ -923,6 +812,9 @@ export default function AudienceSegments() {
             segment={segment}
             index={i}
             inView={inView}
+            onHoverChange={(hovered) => {
+              hoverIndexRef.current = hovered ? i : null;
+            }}
           />
         ))}
       </div>
