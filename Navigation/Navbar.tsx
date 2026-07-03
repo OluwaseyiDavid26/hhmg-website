@@ -66,24 +66,21 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/icon-black-yellow.png"
+            src="/icon-name-white.png"
+            alt="Hand Held Media Group"
+            width={160} // set to your actual logo's real pixel width
+            height={40} // set to your actual logo's real pixel height
+            className="h-9 w-auto object-contain" // h-9 ≈ 36px, adjust to taste
+            priority
+          />
+          {/* <Image
+            src="/icon-name-white.png"
             alt="Hand Held Media Group"
             width={48}
             height={48}
             className="w-11 h-11 object-contain"
             priority
-          />
-          {/* <Image
-            src="/icon-black-yellow.png"
-            alt="Hand Held Media Group"
-            width={32}
-            height={32}
-            className="w-8 h-8 object-contain"
-            priority
           /> */}
-          {/* <span className="text-white font-semibold text-sm tracking-wide hidden sm:block">
-            Hand Held Media Group
-          </span> */}
         </Link>
 
         {/* Desktop Nav */}
