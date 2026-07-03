@@ -1,4 +1,5 @@
 // import Link from "next/link";
+// import Image from "next/image";
 
 // const quickLinks = [
 //   { label: "Home", href: "/" },
@@ -88,26 +89,21 @@
 //         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 //           {/* Col 1 — Brand */}
 //           <div className="lg:col-span-1">
-//             {/* HH Monogram lockup */}
-//             <Link href="/" className="inline-flex items-center gap-3 mb-5">
-//               <div className="w-9 h-9 bg-white rounded-sm flex items-center justify-center flex-shrink-0">
-//                 <span className="text-[#1A1A1A] font-black text-sm tracking-tight">
-//                   HH
-//                 </span>
-//               </div>
-//               <span className="text-white font-semibold text-sm leading-tight">
-//                 Hand Held
-//                 <br />
-//                 Media Group
-//               </span>
+//             <Link href="/" className="inline-flex items-center mb-5">
+//               <Image
+//                 src="/icon-name-white.png"
+//                 alt="Hand Held Media Group"
+//                 width={180}
+//                 height={40}
+//                 className="h-11 w-auto object-contain"
+//                 priority
+//               />
 //             </Link>
 
-//             {/* One-liner */}
 //             <p className="text-white/40 text-sm leading-relaxed mb-8">
 //               Building the infrastructure for African storytelling.
 //             </p>
 
-//             {/* Social icons */}
 //             <div className="flex items-center gap-4">
 //               {socialLinks.map((social) => (
 //                 <Link
@@ -187,7 +183,7 @@
 //                   />
 //                 </svg>
 //                 <span className="text-white/40 text-sm leading-relaxed">
-//                   Lagos & Abuja,
+//                   Lagos &amp; Abuja,
 //                   <br />
 //                   Nigeria
 //                 </span>
@@ -351,14 +347,6 @@ export default function Footer() {
                 className="h-11 w-auto object-contain"
                 priority
               />
-              {/* <Image
-                src="/icon-name-white.png"
-                alt="Hand Held Media Group"
-                width={180}
-                height={40}
-                className="h-9 w-auto object-contain"
-                priority
-              /> */}
             </Link>
 
             <p className="text-white/40 text-sm leading-relaxed mb-8">
@@ -464,7 +452,12 @@ export default function Footer() {
                     d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
                   />
                 </svg>
-                <span className="text-white/40 text-sm">hello@hhmg.africa</span>
+                <a
+                  href="mailto:hello@hhmg.africa"
+                  className="text-white/40 text-sm hover:text-[#F5C400] transition-colors duration-200"
+                >
+                  hello@hhmg.africa
+                </a>
               </li>
             </ul>
 
