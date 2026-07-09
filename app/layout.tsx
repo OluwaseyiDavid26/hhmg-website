@@ -5,7 +5,8 @@ import "./globals.css";
 import Navbar from "@/Navigation/Navbar";
 import Footer from "@/Navigation/Footer";
 // import SplashScreen from "@/components/Splashscreen";
-import SplashScreen from "@/components/Splashscreen";
+// import SplashScreen from "@/components/Splashscreen";
+import SplashScreen from "@/components/SplashScreen";
 
 // const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
