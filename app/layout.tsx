@@ -4,6 +4,8 @@ import "./globals.css";
 // import Navbar from "@/components/Navigation/Navbar";
 import Navbar from "@/Navigation/Navbar";
 import Footer from "@/Navigation/Footer";
+// import SplashScreen from "@/components/Splashscreen";
+import SplashScreen from "@/components/Splashscreen";
 
 // const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
@@ -26,6 +28,7 @@ export default function RootLayout({
         className={`${inter.variable} ${display.variable} antialiased bg-[#1A1A1A] text-white`}
       >
         {/* <body className={`${inter.variable} antialiased bg-[#1A1A1A] text-white`}> */}
+        <SplashScreen />
         <Navbar />
         <main className="pt-16">{children}</main>
         <Footer />
