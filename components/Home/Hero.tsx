@@ -1778,6 +1778,24 @@ const CARDS = [
   },
 ];
 
+const MOBILE_FRAMES = [
+  {
+    src: "/IMG-20260708-WA0027.jpg",
+    label: "HHMG · PROD",
+    wide: true,
+  },
+  {
+    src: "/images/film-set-action-stockcake.jpg",
+    label: "STUDIOS",
+    wide: false,
+  },
+  {
+    src: "/images/cinema-camera-mechanics-stockcake.jpg",
+    label: "RENTALS",
+    wide: false,
+  },
+];
+
 /* ── Globe canvas ── */
 function GlobeCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -1856,7 +1874,8 @@ function GlobeCanvas() {
         H = safeCanvas.height;
       const cx = W * 0.5,
         cy = H * 0.5;
-      const R = Math.min(W, H) * 0.32;
+      /* bigger on mobile */
+      const R = Math.min(W, H) * (W < 768 ? 0.42 : 0.32);
 
       ctx.clearRect(0, 0, W, H);
 
@@ -2061,6 +2080,72 @@ function TiltedCard({
   );
 }
 
+/* ── Mobile cinema frame ── */
+function CinemaFrame({
+  src,
+  alt,
+  label,
+  mounted,
+  delay,
+}: {
+  src: string;
+  alt: string;
+  label: string;
+  mounted: boolean;
+  delay: number;
+}) {
+  return (
+    <div
+      className="relative overflow-hidden rounded-lg border border-white/10 flex-1"
+      style={{
+        boxShadow: "0 12px 32px rgba(0,0,0,0.75)",
+        opacity: mounted ? 1 : 0,
+        transform: mounted ? "translateY(0)" : "translateY(16px)",
+        transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s`,
+      }}
+    >
+      {/* Cinema letterbox bars */}
+      <div className="absolute top-0 inset-x-0 h-[5px] bg-[#0d0d0d] z-10 pointer-events-none" />
+      <div className="absolute bottom-0 inset-x-0 h-[5px] bg-[#0d0d0d] z-10 pointer-events-none" />
+
+      {/* Image */}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover"
+        style={{ filter: "brightness(0.62) saturate(0.75)" }}
+      />
+
+      {/* Dark overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(160deg, rgba(0,0,0,0.05), rgba(0,0,0,0.6))",
+        }}
+      />
+
+      {/* Gold label bottom-left */}
+      <span
+        className="absolute bottom-2 left-3 z-20 font-mono text-[8px] tracking-widest uppercase"
+        style={{ color: "rgba(245,196,0,0.65)" }}
+      >
+        {label}
+      </span>
+
+      {/* Top gold edge */}
+      <div
+        className="absolute top-[5px] inset-x-0 h-px z-20 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, rgba(245,196,0,0.3), transparent)",
+        }}
+      />
+    </div>
+  );
+}
+
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
 
@@ -2080,18 +2165,9 @@ export default function Hero() {
           from { opacity:0; transform:translateY(16px); }
           to   { opacity:1; transform:translateY(0); }
         }
-        .mobile-cards-scroll {
-          display: flex;
-          gap: 12px;
-          overflow-x: auto;
-          padding: 8px 24px 4px;
-          scrollbar-width: none;
-          -webkit-overflow-scrolling: touch;
-        }
-        .mobile-cards-scroll::-webkit-scrollbar { display: none; }
       `}</style>
 
-      <section className="relative min-h-screen bg-[#0D0D0D] overflow-hidden flex flex-col lg:block lg:flex-none lg:items-center lg:justify-center">
+      <section className="relative min-h-screen bg-[#0D0D0D] overflow-hidden flex flex-col lg:block">
         {/* ── Globe — centered behind everything ── */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -2348,46 +2424,114 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ── MOBILE ONLY: horizontal scrollable cards below CTAs ── */}
-        <div className="relative lg:hidden pb-10" style={{ zIndex: 10 }}>
-          <p className="text-center text-white/20 text-[9px] tracking-[0.2em] uppercase mb-3 font-sans">
+        {/* ── MOBILE ONLY: Cinema letterbox frames ── */}
+        <div className="relative lg:hidden px-5 pb-12" style={{ zIndex: 10 }}>
+          {/* Section label */}
+          <p
+            className="text-center font-mono text-[8px] tracking-[0.25em] uppercase mb-3"
+            style={{
+              color: "rgba(245,196,0,0.4)",
+              opacity: mounted ? 1 : 0,
+              transition: "opacity 0.8s ease 0.6s",
+            }}
+          >
             Our Productions
           </p>
-          <div className="mobile-cards-scroll">
-            {CARDS.map((card, i) => {
-              const rotations = ["-3deg", "3deg", "-2deg"];
-              const margins = ["0px", "10px", "0px"];
-              return (
+
+          {/* Wide frame */}
+          <div
+            className="relative h-[90px] mb-2 rounded-lg overflow-hidden border border-white/10"
+            style={{
+              boxShadow: "0 12px 32px rgba(0,0,0,0.75)",
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? "translateY(0)" : "translateY(16px)",
+              transition: "opacity 0.7s ease 0.7s, transform 0.7s ease 0.7s",
+            }}
+          >
+            <div className="absolute top-0 inset-x-0 h-[5px] bg-[#0d0d0d] z-10" />
+            <div className="absolute bottom-0 inset-x-0 h-[5px] bg-[#0d0d0d] z-10" />
+            <Image
+              src="/IMG-20260708-WA0027.jpg"
+              alt="HHMG production"
+              fill
+              className="object-cover"
+              style={{ filter: "brightness(0.62) saturate(0.75)" }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(160deg, rgba(0,0,0,0.05), rgba(0,0,0,0.6))",
+              }}
+            />
+            <div
+              className="absolute top-[5px] inset-x-0 h-px z-20"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, rgba(245,196,0,0.3), transparent)",
+              }}
+            />
+            <span
+              className="absolute bottom-2 left-3 z-20 font-mono text-[8px] tracking-widest uppercase"
+              style={{ color: "rgba(245,196,0,0.65)" }}
+            >
+              HHMG · PROD
+            </span>
+          </div>
+
+          {/* Two smaller frames side by side */}
+          <div className="flex gap-2">
+            {[
+              {
+                src: "/images/film-set-action-stockcake.jpg",
+                label: "STUDIOS",
+              },
+              {
+                src: "/images/cinema-camera-mechanics-stockcake.jpg",
+                label: "RENTALS",
+              },
+            ].map((frame, i) => (
+              <div
+                key={frame.label}
+                className="relative flex-1 h-[70px] rounded-lg overflow-hidden border border-white/10"
+                style={{
+                  boxShadow: "0 12px 32px rgba(0,0,0,0.75)",
+                  opacity: mounted ? 1 : 0,
+                  transform: mounted ? "translateY(0)" : "translateY(16px)",
+                  transition: `opacity 0.7s ease ${0.85 + i * 0.1}s, transform 0.7s ease ${0.85 + i * 0.1}s`,
+                }}
+              >
+                <div className="absolute top-0 inset-x-0 h-[5px] bg-[#0d0d0d] z-10" />
+                <div className="absolute bottom-0 inset-x-0 h-[5px] bg-[#0d0d0d] z-10" />
+                <Image
+                  src={frame.src}
+                  alt={frame.label}
+                  fill
+                  className="object-cover"
+                  style={{ filter: "brightness(0.62) saturate(0.75)" }}
+                />
                 <div
-                  key={i}
-                  className="flex-shrink-0 relative overflow-hidden rounded-xl border border-white/12"
+                  className="absolute inset-0"
                   style={{
-                    width: 150,
-                    height: 105,
-                    transform: `rotate(${rotations[i]})`,
-                    marginTop: margins[i],
-                    boxShadow: "0 16px 40px rgba(0,0,0,0.7)",
-                    opacity: mounted ? 1 : 0,
-                    transition: `opacity 0.8s ease ${0.5 + i * 0.15}s`,
+                    background:
+                      "linear-gradient(160deg, rgba(0,0,0,0.05), rgba(0,0,0,0.6))",
                   }}
+                />
+                <div
+                  className="absolute top-[5px] inset-x-0 h-px z-20"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, transparent, rgba(245,196,0,0.3), transparent)",
+                  }}
+                />
+                <span
+                  className="absolute bottom-2 left-3 z-20 font-mono text-[8px] tracking-widest uppercase"
+                  style={{ color: "rgba(245,196,0,0.65)" }}
                 >
-                  <Image
-                    src={card.src}
-                    alt={card.alt}
-                    fill
-                    className="object-cover"
-                    style={{ filter: "brightness(0.72) saturate(0.8)" }}
-                  />
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(160deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.6) 100%)",
-                    }}
-                  />
-                </div>
-              );
-            })}
+                  {frame.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
