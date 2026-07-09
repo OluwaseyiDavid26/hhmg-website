@@ -1749,33 +1749,36 @@ const CARDS = [
     width: 200,
     height: 140,
     top: "8%",
-    right: "2%",
+    right: "1%",
     rotate: "-5deg",
     zIndex: 3,
+    delay: 600,
   },
   {
     src: "/images/film-set-action-stockcake.jpg",
     alt: "Film set action",
-    width: 180,
-    height: 125,
-    top: "38%",
-    right: "18%",
+    width: 175,
+    height: 122,
+    top: "40%",
+    right: "16%",
     rotate: "4deg",
     zIndex: 2,
+    delay: 800,
   },
   {
     src: "/images/cinema-camera-mechanics-stockcake.jpg",
     alt: "Cinema camera",
-    width: 165,
-    height: 118,
-    top: "62%",
-    right: "3%",
+    width: 160,
+    height: 115,
+    top: "65%",
+    right: "2%",
     rotate: "-3deg",
     zIndex: 1,
+    delay: 1000,
   },
 ];
 
-/* ── Globe canvas — centered, Africa highlighted ── */
+/* ── Globe canvas ── */
 function GlobeCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
@@ -1783,16 +1786,15 @@ function GlobeCanvas() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const parent = canvas.parentElement;
+    const safeCanvas = canvas;
+    const parent = safeCanvas.parentElement;
     if (!parent) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const canvasEl = canvas;
+    const ctx = safeCanvas.getContext("2d")!;
     let t = 0;
 
     const resize = () => {
-      canvasEl.width = parent.offsetWidth;
-      canvasEl.height = parent.offsetHeight;
+      safeCanvas.width = parent.offsetWidth;
+      safeCanvas.height = parent.offsetHeight;
     };
     resize();
     window.addEventListener("resize", resize);
@@ -1849,10 +1851,9 @@ function GlobeCanvas() {
     }
 
     function draw() {
-      if (!canvas || !ctx) return;
       t += 0.005;
-      const W = canvas.width,
-        H = canvas.height;
+      const W = safeCanvas.width,
+        H = safeCanvas.height;
       const cx = W * 0.5,
         cy = H * 0.5;
       const R = Math.min(W, H) * 0.32;
@@ -1860,23 +1861,20 @@ function GlobeCanvas() {
       ctx.clearRect(0, 0, W, H);
 
       const pulse = 0.5 + 0.5 * Math.sin(t * 1.2);
-
-      /* Gold glow */
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.5);
       g.addColorStop(0, `rgba(245,196,0,${(0.07 + pulse * 0.04).toFixed(3)})`);
       g.addColorStop(1, "transparent");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, W, H);
 
-      /* Africa region glow */
-      const afDotPos = project(deg(1), deg(20), t, cx, cy, R);
-      if (afDotPos) {
+      const afCenter = project(deg(1), deg(20), t, cx, cy, R);
+      if (afCenter) {
         const afG = ctx.createRadialGradient(
-          afDotPos.px,
-          afDotPos.py,
+          afCenter.px,
+          afCenter.py,
           0,
-          afDotPos.px,
-          afDotPos.py,
+          afCenter.px,
+          afCenter.py,
           R * 0.5,
         );
         afG.addColorStop(
@@ -1888,14 +1886,12 @@ function GlobeCanvas() {
         ctx.fillRect(0, 0, W, H);
       }
 
-      /* Globe edge */
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.strokeStyle = "rgba(245,196,0,0.07)";
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      /* Lat grid */
       ctx.strokeStyle = "rgba(255,255,255,0.035)";
       ctx.lineWidth = 0.5;
       for (let la = -60; la <= 60; la += 30) {
@@ -1912,8 +1908,6 @@ function GlobeCanvas() {
         }
         ctx.stroke();
       }
-
-      /* Lng grid */
       for (let lo = -180; lo <= 180; lo += 30) {
         ctx.beginPath();
         let first = true;
@@ -1929,37 +1923,35 @@ function GlobeCanvas() {
         ctx.stroke();
       }
 
-      /* Dots */
       LAND.forEach((d) => {
         const p = project(d.lat, d.lng, t, cx, cy, R);
         if (!p) return;
         const fade = 0.35 + p.z * 0.65;
         ctx.beginPath();
-        ctx.arc(p.px, p.py, d.africa ? 2.6 : 1.3, 0, Math.PI * 2);
+        ctx.arc(p.px, p.py, d.africa ? 2.8 : 1.4, 0, Math.PI * 2);
         ctx.fillStyle = d.africa
           ? `rgba(245,196,0,${(fade * 0.9).toFixed(3)})`
           : `rgba(255,255,255,${(fade * 0.18).toFixed(3)})`;
         ctx.fill();
       });
 
-      /* Africa pulse dot */
-      if (afDotPos) {
-        const afPulse = 0.5 + 0.5 * Math.sin(t * 2.5);
+      const afPulse = 0.5 + 0.5 * Math.sin(t * 2.5);
+      const afDot = project(deg(1), deg(20), t, cx, cy, R);
+      if (afDot) {
         ctx.beginPath();
-        ctx.arc(afDotPos.px, afDotPos.py, 4 + afPulse * 3, 0, Math.PI * 2);
+        ctx.arc(afDot.px, afDot.py, 4 + afPulse * 3, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(245,196,0,${(0.15 + afPulse * 0.2).toFixed(3)})`;
         ctx.fill();
         ctx.beginPath();
-        ctx.arc(afDotPos.px, afDotPos.py, 2, 0, Math.PI * 2);
+        ctx.arc(afDot.px, afDot.py, 2, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(245,196,0,0.9)";
         ctx.fill();
       }
 
-      /* Scanline */
       const scanY = (t * 40) % H;
       const sg = ctx.createLinearGradient(0, scanY - 12, 0, scanY + 12);
       sg.addColorStop(0, "transparent");
-      sg.addColorStop(0.5, "rgba(245,196,0,0.016)");
+      sg.addColorStop(0.5, "rgba(245,196,0,0.018)");
       sg.addColorStop(1, "transparent");
       ctx.fillStyle = sg;
       ctx.fillRect(0, scanY - 12, W, 24);
@@ -1983,7 +1975,7 @@ function GlobeCanvas() {
   );
 }
 
-/* ── Tilted image card ── */
+/* ── Desktop tilted card ── */
 function TiltedCard({
   src,
   alt,
@@ -2022,13 +2014,13 @@ function TiltedCard({
         top,
         right,
         zIndex,
-        opacity: visible ? 1 : 0,
         transform: `rotate(${hovered ? "0deg" : rotate}) scale(${hovered ? 1.06 : 1})`,
+        opacity: visible ? 1 : 0,
         transition:
-          "transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.9s ease, box-shadow 0.4s ease",
+          "transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.8s ease, box-shadow 0.4s ease",
         boxShadow: hovered
-          ? "0 30px 70px rgba(0,0,0,0.7), 0 0 0 1px rgba(245,196,0,0.28)"
-          : "0 20px 55px rgba(0,0,0,0.65)",
+          ? "0 30px 70px rgba(0,0,0,0.75), 0 0 0 1px rgba(245,196,0,0.28)"
+          : "0 20px 50px rgba(0,0,0,0.65)",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -2040,17 +2032,13 @@ function TiltedCard({
         className="object-cover"
         style={{ filter: "brightness(0.72) saturate(0.8)" }}
       />
-
-      {/* Shadow overlay */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(160deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.58) 100%)",
+            "linear-gradient(160deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.6) 100%)",
         }}
       />
-
-      {/* Gold shimmer on hover */}
       <div
         className="absolute inset-0"
         style={{
@@ -2060,8 +2048,6 @@ function TiltedCard({
           transition: "opacity 0.4s",
         }}
       />
-
-      {/* Top gold line */}
       <div
         className="absolute top-0 inset-x-0 h-px"
         style={{
@@ -2088,16 +2074,25 @@ export default function Hero() {
       <style>{`
         @keyframes fadeBlur {
           from { opacity:0; filter:blur(10px); transform:translateY(28px) scale(1.04); }
-          to   { opacity:1; filter:blur(0);   transform:translateY(0) scale(1); }
+          to   { opacity:1; filter:blur(0);    transform:translateY(0) scale(1); }
         }
         @keyframes fadeUp {
           from { opacity:0; transform:translateY(16px); }
           to   { opacity:1; transform:translateY(0); }
         }
+        .mobile-cards-scroll {
+          display: flex;
+          gap: 12px;
+          overflow-x: auto;
+          padding: 8px 24px 4px;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+        }
+        .mobile-cards-scroll::-webkit-scrollbar { display: none; }
       `}</style>
 
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0D0D0D]">
-        {/* ── Globe — full width centered behind everything ── */}
+      <section className="relative min-h-screen bg-[#0D0D0D] overflow-hidden flex flex-col lg:block lg:flex-none lg:items-center lg:justify-center">
+        {/* ── Globe — centered behind everything ── */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ zIndex: 1 }}
@@ -2105,28 +2100,16 @@ export default function Hero() {
           <GlobeCanvas />
         </div>
 
-        {/* ── Tilted cards — right side, visible on all screens ── */}
+        {/* ── Desktop only: tilted cards right side ── */}
         <div
-          className="absolute top-0 right-0 bottom-0 pointer-events-none"
-          style={{ width: "clamp(130px, 28vw, 360px)", zIndex: 2 }}
+          className="absolute top-0 right-0 bottom-0 pointer-events-none hidden lg:block"
+          style={{ width: "32%", zIndex: 2 }}
         >
           {CARDS.map((card, i) => (
-            <TiltedCard
-              key={i}
-              src={card.src}
-              alt={card.alt}
-              width={card.width}
-              height={card.height}
-              top={card.top}
-              right={card.right}
-              rotate={card.rotate}
-              zIndex={card.zIndex}
-              delay={700 + i * 220}
-            />
+            <TiltedCard key={i} {...card} />
           ))}
-          {/* Left fade so cards blend into center */}
           <div
-            className="absolute inset-y-0 left-0 w-10 sm:w-20 pointer-events-none"
+            className="absolute inset-y-0 left-0 w-20 pointer-events-none"
             style={{
               background: "linear-gradient(to left, transparent, #0D0D0D)",
               zIndex: 10,
@@ -2151,7 +2134,24 @@ export default function Hero() {
           style={{
             zIndex: 4,
             background:
-              "radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,0.45) 58%, rgba(0,0,0,0.88) 100%)",
+              "radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.85) 100%)",
+          }}
+        />
+
+        {/* ── Light leak ── */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            zIndex: 3,
+            top: "-10%",
+            left: "-5%",
+            width: "55%",
+            height: "70%",
+            background:
+              "radial-gradient(ellipse at top left, rgba(245,196,0,0.07) 0%, rgba(245,196,0,0.02) 40%, transparent 70%)",
+            filter: "blur(40px)",
+            opacity: mounted ? 1 : 0,
+            transition: "opacity 3s ease",
           }}
         />
 
@@ -2210,133 +2210,184 @@ export default function Hero() {
           <div className="w-6 h-px bg-white/20" />
         </div>
 
-        {/* ── CENTER CONTENT ── */}
+        {/* ── CENTER: Text content ── */}
         <div
-          className="relative text-center px-6 max-w-5xl mx-auto"
+          className="relative flex-1 flex items-center justify-center lg:min-h-screen"
           style={{ zIndex: 10 }}
         >
-          <h1
-            className="font-display font-black text-white leading-[1.05] tracking-[-0.02em] mb-8"
-            style={{
-              fontSize: "clamp(40px, 8vw, 90px)",
-              animation: mounted
-                ? "fadeBlur 1.4s cubic-bezier(0.16,1,0.3,1) 0.55s both"
-                : "none",
-              opacity: mounted ? undefined : 0,
-            }}
-          >
-            <span className="flex items-end justify-center flex-wrap leading-none">
-              <span className="inline-flex items-end whitespace-nowrap">
-                <span
-                  className="inline-flex items-end flex-shrink-0"
-                  aria-label="A"
-                  style={{ marginRight: "-0.01em", marginBottom: "0.01em" }}
+          <div className="text-center px-6 max-w-5xl mx-auto w-full pt-24 pb-8 lg:py-0">
+            {/* H1 */}
+            <h1
+              className="font-display font-black text-white leading-[1.05] tracking-[-0.02em] mb-8"
+              style={{
+                fontSize: "clamp(40px, 8vw, 90px)",
+                animation: mounted
+                  ? "fadeBlur 1.4s cubic-bezier(0.16,1,0.3,1) 0.55s both"
+                  : "none",
+                opacity: mounted ? undefined : 0,
+              }}
+            >
+              <span className="flex items-end justify-center flex-wrap leading-none">
+                <span className="inline-flex items-end whitespace-nowrap">
+                  <span
+                    className="inline-flex items-end flex-shrink-0"
+                    aria-label="A"
+                    style={{ marginRight: "-0.01em", marginBottom: "0.01em" }}
+                  >
+                    <img
+                      src="/IMG-20260627-WA0036 copy copy.png"
+                      alt=""
+                      aria-hidden="true"
+                      style={{
+                        width: "clamp(34px, 7.2vw, 92px)",
+                        height: "auto",
+                        mixBlendMode: "screen",
+                        display: "block",
+                      }}
+                    />
+                  </span>
+                  <span>frica Has Stories</span>
+                </span>
+                <span>&nbsp;the World</span>
+              </span>
+              <em
+                className="not-italic block"
+                style={{
+                  color: "#F5C400",
+                  textShadow: "0 0 80px rgba(245,196,0,0.28)",
+                }}
+              >
+                Needs to Hear.
+              </em>
+            </h1>
+
+            {/* Tagline */}
+            <p
+              className="text-white/30 text-lg sm:text-xl md:text-2xl font-light tracking-wide mb-6 uppercase"
+              style={{
+                animation: mounted ? "fadeUp 1.1s ease 1.3s both" : "none",
+                opacity: mounted ? undefined : 0,
+              }}
+            >
+              We Build What It Takes to Tell Them.
+            </p>
+
+            {/* Divider */}
+            <div
+              className="flex items-center justify-center gap-4 mb-8"
+              style={{
+                opacity: mounted ? 1 : 0,
+                transition: "opacity 1s ease 1.65s",
+              }}
+            >
+              <div
+                className="h-px bg-white/10"
+                style={{
+                  width: mounted ? "64px" : "0px",
+                  transition: "width 1s ease 1.65s",
+                }}
+              />
+              <div className="w-1 h-1 rounded-full bg-[#F5C400]/60" />
+              <div
+                className="h-px bg-white/10"
+                style={{
+                  width: mounted ? "64px" : "0px",
+                  transition: "width 1s ease 1.65s",
+                }}
+              />
+            </div>
+
+            {/* Sub-copy */}
+            <p
+              className="text-white/50 text-base sm:text-lg max-w-xl mx-auto leading-relaxed mb-12"
+              style={{
+                animation: mounted ? "fadeUp 1.1s ease 1.9s both" : "none",
+                opacity: mounted ? undefined : 0,
+              }}
+            >
+              Hand Held Media Group is a Lagos and Abuja-based media holding
+              company — equipping creators, producing original content, and
+              building the infrastructure for African storytelling at its
+              finest.
+            </p>
+
+            {/* CTAs */}
+            <div
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+              style={{
+                animation: mounted ? "fadeUp 1.1s ease 2.15s both" : "none",
+                opacity: mounted ? undefined : 0,
+              }}
+            >
+              <Link
+                href="/companies"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#F5C400] text-[#1A1A1A] font-black text-sm px-9 py-4 rounded-sm hover:bg-[#e6b800] hover:scale-[1.03] active:scale-[0.97] transition-all duration-200 tracking-wide uppercase"
+              >
+                Explore Our Work
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
                 >
-                  <img
-                    src="/IMG-20260627-WA0036 copy copy.png"
-                    alt=""
-                    aria-hidden="true"
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Link>
+              <Link
+                href="/work-with-us"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-white/15 text-white/70 text-sm font-medium px-9 py-4 rounded-sm hover:border-white/30 hover:text-white hover:scale-[1.03] active:scale-[0.97] transition-all duration-200 tracking-wide uppercase"
+              >
+                Work With Us
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* ── MOBILE ONLY: horizontal scrollable cards below CTAs ── */}
+        <div className="relative lg:hidden pb-10" style={{ zIndex: 10 }}>
+          <p className="text-center text-white/20 text-[9px] tracking-[0.2em] uppercase mb-3 font-sans">
+            Our Productions
+          </p>
+          <div className="mobile-cards-scroll">
+            {CARDS.map((card, i) => {
+              const rotations = ["-3deg", "3deg", "-2deg"];
+              const margins = ["0px", "10px", "0px"];
+              return (
+                <div
+                  key={i}
+                  className="flex-shrink-0 relative overflow-hidden rounded-xl border border-white/12"
+                  style={{
+                    width: 150,
+                    height: 105,
+                    transform: `rotate(${rotations[i]})`,
+                    marginTop: margins[i],
+                    boxShadow: "0 16px 40px rgba(0,0,0,0.7)",
+                    opacity: mounted ? 1 : 0,
+                    transition: `opacity 0.8s ease ${0.5 + i * 0.15}s`,
+                  }}
+                >
+                  <Image
+                    src={card.src}
+                    alt={card.alt}
+                    fill
+                    className="object-cover"
+                    style={{ filter: "brightness(0.72) saturate(0.8)" }}
+                  />
+                  <div
+                    className="absolute inset-0"
                     style={{
-                      width: "clamp(34px, 7.2vw, 90px)",
-                      height: "auto",
-                      mixBlendMode: "screen",
-                      display: "block",
+                      background:
+                        "linear-gradient(160deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.6) 100%)",
                     }}
                   />
-                </span>
-                <span>frica Has Stories</span>
-              </span>
-              <span>&nbsp;the World</span>
-            </span>
-            <em
-              className="not-italic block"
-              style={{
-                color: "#F5C400",
-                textShadow: "0 0 80px rgba(245,196,0,0.28)",
-              }}
-            >
-              Needs to Hear.
-            </em>
-          </h1>
-
-          <p
-            className="text-white/30 text-base sm:text-xl md:text-2xl font-light tracking-wide mb-6 uppercase"
-            style={{
-              animation: mounted ? "fadeUp 1.1s ease 1.3s both" : "none",
-              opacity: mounted ? undefined : 0,
-            }}
-          >
-            We Build What It Takes to Tell Them.
-          </p>
-
-          <div
-            className="flex items-center justify-center gap-4 mb-8"
-            style={{
-              opacity: mounted ? 1 : 0,
-              transition: "opacity 1s ease 1.65s",
-            }}
-          >
-            <div
-              className="h-px bg-white/10"
-              style={{
-                width: mounted ? "64px" : "0px",
-                transition: "width 1s ease 1.65s",
-              }}
-            />
-            <div className="w-1 h-1 rounded-full bg-[#F5C400]/60" />
-            <div
-              className="h-px bg-white/10"
-              style={{
-                width: mounted ? "64px" : "0px",
-                transition: "width 1s ease 1.65s",
-              }}
-            />
-          </div>
-
-          <p
-            className="text-white/50 text-sm sm:text-lg max-w-xl mx-auto leading-relaxed mb-12"
-            style={{
-              animation: mounted ? "fadeUp 1.1s ease 1.9s both" : "none",
-              opacity: mounted ? undefined : 0,
-            }}
-          >
-            Hand Held Media Group is a Lagos and Abuja-based media holding
-            company — equipping creators, producing original content, and
-            building the infrastructure for African storytelling at its finest.
-          </p>
-
-          <div
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            style={{
-              animation: mounted ? "fadeUp 1.1s ease 2.15s both" : "none",
-              opacity: mounted ? undefined : 0,
-            }}
-          >
-            <Link
-              href="/companies"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#F5C400] text-[#1A1A1A] font-black text-sm px-9 py-4 rounded-sm hover:bg-[#e6b800] hover:scale-[1.03] active:scale-[0.97] transition-all duration-200 tracking-wide uppercase"
-            >
-              Explore Our Work
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </Link>
-            <Link
-              href="/work-with-us"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-white/15 text-white/70 text-sm font-medium px-9 py-4 rounded-sm hover:border-white/30 hover:text-white hover:scale-[1.03] active:scale-[0.97] transition-all duration-200 tracking-wide uppercase"
-            >
-              Work With Us
-            </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
