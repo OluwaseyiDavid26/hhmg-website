@@ -1,21 +1,61 @@
 // "use client";
 
+// import Image from "next/image";
+
 // export default function RestoredHeader() {
 //   return (
 //     <section className="relative bg-[#1A1A1A] overflow-hidden px-6 pt-36 pb-20 sm:pt-44 sm:pb-28">
+//       {/* ── Blended background image — subtle, not dominant ── */}
+//       <div
+//         className="absolute inset-0 pointer-events-none"
+//         style={{ zIndex: 0 }}
+//       >
+//         <Image
+//           src="/IMG-20260709-WA0026.jpg"
+//           alt=""
+//           aria-hidden="true"
+//           fill
+//           priority
+//           className="object-cover object-center"
+//           style={{
+//             opacity: 0.12,
+//             filter: "grayscale(60%) brightness(0.6)",
+//             mixBlendMode: "luminosity",
+//           }}
+//         />
+//       </div>
+
+//       {/* Dark gradient overlay — keeps text readable */}
+//       <div
+//         className="absolute inset-0 pointer-events-none"
+//         style={{
+//           zIndex: 1,
+//           background:
+//             "linear-gradient(to bottom, rgba(26,26,26,0.55) 0%, rgba(26,26,26,0.75) 60%, #1A1A1A 100%)",
+//         }}
+//       />
+
+//       {/* Gold glow orb */}
 //       <div
 //         className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[60rem] h-[40rem] rounded-full bg-[#F5C400]/[0.08] blur-[120px]"
+//         style={{ zIndex: 2 }}
 //         aria-hidden="true"
 //       />
 
+//       {/* Vertical side label */}
 //       <div
 //         className="hidden lg:block absolute left-10 top-1/2 -translate-y-1/2 origin-center -rotate-90 text-white/25 text-[11px] font-medium tracking-[0.3em] uppercase whitespace-nowrap"
+//         style={{ zIndex: 3 }}
 //         aria-hidden="true"
 //       >
 //         Hand Held Media &amp; Production Co.
 //       </div>
 
-//       <div className="relative max-w-3xl mx-auto text-center">
+//       {/* Content */}
+//       <div
+//         className="relative max-w-3xl mx-auto text-center"
+//         style={{ zIndex: 3 }}
+//       >
 //         <h1 className="font-display text-6xl sm:text-7xl md:text-[6.5rem] text-white tracking-tight leading-none opacity-0 animate-[fadeIn_0.35s_ease-out_0.06s_forwards]">
 //           Restored
 //         </h1>
@@ -30,7 +70,10 @@
 //         </p>
 //       </div>
 
-//       <div className="relative mt-20 h-px max-w-3xl mx-auto bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+//       <div
+//         className="relative mt-20 h-px max-w-3xl mx-auto bg-gradient-to-r from-transparent via-white/10 to-transparent"
+//         style={{ zIndex: 3 }}
+//       />
 
 //       <style jsx global>{`
 //         @keyframes fadeIn {
@@ -71,7 +114,7 @@ import Image from "next/image";
 export default function RestoredHeader() {
   return (
     <section className="relative bg-[#1A1A1A] overflow-hidden px-6 pt-36 pb-20 sm:pt-44 sm:pb-28">
-      {/* ── Blended background image — subtle, not dominant ── */}
+      {/* ── Background image — full presence ── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ zIndex: 0 }}
@@ -83,21 +126,16 @@ export default function RestoredHeader() {
           fill
           priority
           className="object-cover object-center"
-          style={{
-            opacity: 0.12,
-            filter: "grayscale(60%) brightness(0.6)",
-            mixBlendMode: "luminosity",
-          }}
         />
       </div>
 
-      {/* Dark gradient overlay — keeps text readable */}
+      {/* Dark gradient overlay — keeps text readable, image still reads clearly */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 1,
           background:
-            "linear-gradient(to bottom, rgba(26,26,26,0.55) 0%, rgba(26,26,26,0.75) 60%, #1A1A1A 100%)",
+            "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 40%, rgba(26,26,26,0.65) 75%, #1A1A1A 100%)",
         }}
       />
 
