@@ -140,7 +140,7 @@
 //         H = cv.height;
 //       ctx.clearRect(0, 0, W, H);
 
-//       /* Glow behind tree */
+//       /* Glow behind tree — bumped up so it reads as a real light source */
 //       const pulse = 0.5 + 0.5 * Math.sin(globalT * 0.4);
 //       const g = ctx.createRadialGradient(
 //         rootX,
@@ -150,7 +150,7 @@
 //         rootY - 150,
 //         320,
 //       );
-//       g.addColorStop(0, `rgba(245,196,0,${(0.045 + pulse * 0.02).toFixed(3)})`);
+//       g.addColorStop(0, `rgba(245,196,0,${(0.065 + pulse * 0.03).toFixed(3)})`);
 //       g.addColorStop(1, "transparent");
 //       ctx.fillStyle = g;
 //       ctx.fillRect(0, 0, W, H);
@@ -182,9 +182,9 @@
 //         const ex = b.x1 + Math.cos(animAngle) * b.len * b.progress;
 //         const ey = b.y1 + Math.sin(animAngle) * b.len * b.progress;
 
-//         const alpha = 0.5 - b.depth * 0.07;
-//         ctx.strokeStyle = `rgba(245,196,0,${Math.max(0.08, alpha)})`;
-//         ctx.lineWidth = Math.max(0.5, 2.5 - b.depth * 0.5);
+//         const alpha = 0.62 - b.depth * 0.07;
+//         ctx.strokeStyle = `rgba(245,196,0,${Math.max(0.14, alpha)})`;
+//         ctx.lineWidth = Math.max(0.6, 2.6 - b.depth * 0.5);
 //         ctx.lineCap = "round";
 //         ctx.beginPath();
 //         ctx.moveTo(b.x1, b.y1);
@@ -195,7 +195,7 @@
 //           const bloomPulse = 0.5 + 0.5 * Math.sin(globalT * 1.5 + b.swayPhase);
 //           ctx.beginPath();
 //           ctx.arc(ex, ey, 2 + bloomPulse * 1.2, 0, Math.PI * 2);
-//           ctx.fillStyle = `rgba(245,196,0,${(0.3 + bloomPulse * 0.3).toFixed(3)})`;
+//           ctx.fillStyle = `rgba(245,196,0,${(0.4 + bloomPulse * 0.35).toFixed(3)})`;
 //           ctx.fill();
 //         }
 //       });
@@ -204,7 +204,7 @@
 //       const scanY = (globalT * 22) % H;
 //       const sg = ctx.createLinearGradient(0, scanY - 10, 0, scanY + 10);
 //       sg.addColorStop(0, "transparent");
-//       sg.addColorStop(0.5, "rgba(245,196,0,0.014)");
+//       sg.addColorStop(0.5, "rgba(245,196,0,0.018)");
 //       sg.addColorStop(1, "transparent");
 //       ctx.fillStyle = sg;
 //       ctx.fillRect(0, scanY - 10, W, 20);
@@ -420,7 +420,9 @@
 //     <div
 //       className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300"
 //       style={{
-//         background: hovered ? "rgba(245,196,0,0.18)" : "rgba(245,196,0,0.08)",
+//         background: hovered ? "rgba(245,196,0,0.2)" : "rgba(245,196,0,0.09)",
+//         boxShadow: hovered ? "0 6px 18px -8px rgba(245,196,0,0.5)" : "none",
+//         transform: hovered ? "translateY(-1px) scale(1.05)" : "none",
 //       }}
 //       onMouseEnter={() => setHovered(true)}
 //       onMouseLeave={() => setHovered(false)}
@@ -515,6 +517,26 @@
 //           }}
 //         />
 
+//         {/* Watermark — "GROWTH" as an engraved outline, echoing the branch
+//             canvas itself instead of just labelling the subsidiary name */}
+//         <div
+//           className="absolute left-0 top-1/2 -translate-y-1/2 font-black leading-none select-none pointer-events-none tracking-tighter hidden lg:block"
+//           style={{
+//             fontSize: "15vw",
+//             zIndex: 1,
+//             color: "transparent",
+//             WebkitTextStroke: "1px rgba(255,255,255,0.06)",
+//             opacity: inView ? 1 : 0,
+//             transform: inView
+//               ? "translateY(-50%) translateX(0)"
+//               : "translateY(-50%) translateX(-40px)",
+//             transition: "opacity 1.6s ease 0.3s, transform 1.6s ease 0.3s",
+//           }}
+//           aria-hidden="true"
+//         >
+//           GROWTH
+//         </div>
+
 //         <div className="relative max-w-5xl mx-auto" style={{ zIndex: 10 }}>
 //           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
 //             {/* ── LEFT — zooms in from the left ── */}
@@ -528,8 +550,8 @@
 //               }}
 //             >
 //               <div className="inline-flex items-center gap-3 mb-6">
-//                 <span className="text-white/15 text-xs font-mono">03</span>
-//                 <div className="w-6 h-px bg-white/15" />
+//                 <span className="text-white/25 text-xs font-mono">03</span>
+//                 <div className="w-6 h-px bg-white/25" />
 //                 <span className="text-[#F5C400] text-[10px] font-bold tracking-[0.35em] uppercase">
 //                   HH Creators Platform
 //                 </span>
@@ -625,7 +647,7 @@
 //               }}
 //             >
 //               <p
-//                 className="text-white/25 text-[10px] font-bold tracking-[0.3em] uppercase mb-6 pb-4 border-b border-white/10"
+//                 className="text-white/35 text-[10px] font-bold tracking-[0.3em] uppercase mb-6 pb-4 border-b border-white/[0.15]"
 //                 style={{
 //                   opacity: inView ? 1 : 0,
 //                   animation: inView ? "fadeUp 0.8s ease 0.4s both" : "none",
@@ -706,7 +728,7 @@ function useInView(threshold = 0.1) {
   return { ref, inView };
 }
 
-/* ── Branch growth tree class ── */
+/* ── Branch growth tree ── */
 class Branch {
   x1: number;
   y1: number;
@@ -770,31 +792,31 @@ class Branch {
   }
 }
 
-/* ── Background canvas: growth tree + particles ── */
+/* ── Background canvas ── */
 function BgCanvas({ active }: { active: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
     if (!active) return;
-    const currentCanvas = canvasRef.current;
-    if (!currentCanvas) return;
-    const cv = currentCanvas;
-    const parent = cv.parentElement;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const canvasEl = canvas;
+    const parent = canvasEl.parentElement;
     if (!parent) return;
-    const ctx = cv.getContext("2d") as CanvasRenderingContext2D;
+    const ctx = canvasEl.getContext("2d") as CanvasRenderingContext2D;
     if (!ctx) return;
 
     let globalT = 0;
     const resize = () => {
-      cv.width = parent.offsetWidth;
-      cv.height = parent.offsetHeight;
+      canvasEl.width = parent.offsetWidth;
+      canvasEl.height = parent.offsetHeight;
     };
     resize();
     window.addEventListener("resize", resize);
 
-    const rootX = cv.width * 0.78;
-    const rootY = cv.height * 0.95;
+    const rootX = canvasEl.width * 0.78;
+    const rootY = canvasEl.height * 0.95;
     const tree = new Branch(rootX, rootY, -Math.PI / 2, 50, 0, 4);
     const allBranches = tree.allBranches();
 
@@ -808,8 +830,8 @@ function BgCanvas({ active }: { active: boolean }) {
       gold: boolean;
     };
     const particles: Particle[] = Array.from({ length: 36 }, () => ({
-      x: Math.random() * cv.width,
-      y: Math.random() * cv.height,
+      x: Math.random() * canvasEl.width,
+      y: Math.random() * canvasEl.height,
       vx: (Math.random() - 0.5) * 0.15,
       vy: (Math.random() - 0.5) * 0.15,
       r: Math.random() * 1.2 + 0.3,
@@ -819,11 +841,10 @@ function BgCanvas({ active }: { active: boolean }) {
 
     function draw() {
       globalT += 0.012;
-      const W = cv.width,
-        H = cv.height;
+      const W = canvasEl.width,
+        H = canvasEl.height;
       ctx.clearRect(0, 0, W, H);
 
-      /* Glow behind tree — bumped up so it reads as a real light source */
       const pulse = 0.5 + 0.5 * Math.sin(globalT * 0.4);
       const g = ctx.createRadialGradient(
         rootX,
@@ -833,12 +854,11 @@ function BgCanvas({ active }: { active: boolean }) {
         rootY - 150,
         320,
       );
-      g.addColorStop(0, `rgba(245,196,0,${(0.065 + pulse * 0.03).toFixed(3)})`);
+      g.addColorStop(0, `rgba(245,196,0,${(0.045 + pulse * 0.02).toFixed(3)})`);
       g.addColorStop(1, "transparent");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, W, H);
 
-      /* Particles */
       particles.forEach((p) => {
         p.x = (p.x + p.vx + W) % W;
         p.y = (p.y + p.vy + H) % H;
@@ -850,13 +870,10 @@ function BgCanvas({ active }: { active: boolean }) {
         ctx.fill();
       });
 
-      /* Growth tree */
       allBranches.forEach((b) => {
-        if (globalT > b.delay && b.progress < 1) {
+        if (globalT > b.delay && b.progress < 1)
           b.progress = Math.min(1, b.progress + 0.025);
-        }
         if (b.progress <= 0) return;
-
         const sway =
           b.progress >= 1
             ? Math.sin(globalT * 0.6 + b.swayPhase) * 0.025 * b.depth
@@ -864,33 +881,30 @@ function BgCanvas({ active }: { active: boolean }) {
         const animAngle = b.angle + sway;
         const ex = b.x1 + Math.cos(animAngle) * b.len * b.progress;
         const ey = b.y1 + Math.sin(animAngle) * b.len * b.progress;
-
-        const alpha = 0.62 - b.depth * 0.07;
-        ctx.strokeStyle = `rgba(245,196,0,${Math.max(0.14, alpha)})`;
-        ctx.lineWidth = Math.max(0.6, 2.6 - b.depth * 0.5);
+        const alpha = 0.5 - b.depth * 0.07;
+        ctx.strokeStyle = `rgba(245,196,0,${Math.max(0.08, alpha)})`;
+        ctx.lineWidth = Math.max(0.5, 2.5 - b.depth * 0.5);
         ctx.lineCap = "round";
         ctx.beginPath();
         ctx.moveTo(b.x1, b.y1);
         ctx.lineTo(ex, ey);
         ctx.stroke();
-
         if (b.isLeaf && b.progress >= 0.95) {
           const bloomPulse = 0.5 + 0.5 * Math.sin(globalT * 1.5 + b.swayPhase);
           ctx.beginPath();
           ctx.arc(ex, ey, 2 + bloomPulse * 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(245,196,0,${(0.4 + bloomPulse * 0.35).toFixed(3)})`;
+          ctx.fillStyle = `rgba(245,196,0,${(0.3 + bloomPulse * 0.3).toFixed(3)})`;
           ctx.fill();
         }
       });
 
-      /* Scanline */
-      const scanY = (globalT * 22) % H;
-      const sg = ctx.createLinearGradient(0, scanY - 10, 0, scanY + 10);
+      const scanY = (t: number) => (globalT * 22) % H;
+      const sg = ctx.createLinearGradient(0, scanY(0) - 10, 0, scanY(0) + 10);
       sg.addColorStop(0, "transparent");
-      sg.addColorStop(0.5, "rgba(245,196,0,0.018)");
+      sg.addColorStop(0.5, "rgba(245,196,0,0.014)");
       sg.addColorStop(1, "transparent");
       ctx.fillStyle = sg;
-      ctx.fillRect(0, scanY - 10, W, 20);
+      ctx.fillRect(0, scanY(0) - 10, W, 20);
 
       rafRef.current = requestAnimationFrame(draw);
     }
@@ -912,7 +926,7 @@ function BgCanvas({ active }: { active: boolean }) {
   );
 }
 
-/* ── Benefit icon draw functions ── */
+/* ── Icon draw functions ── */
 type IconType = "training" | "network" | "rentals" | "money" | "forum";
 
 function drawTraining(ctx: CanvasRenderingContext2D, t: number, h: boolean) {
@@ -976,13 +990,7 @@ function drawNetwork(ctx: CanvasRenderingContext2D, t: number, h: boolean) {
 }
 
 type CanvasRenderingContext2DRoundRect = CanvasRenderingContext2D & {
-  roundRect(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    radius: number,
-  ): void;
+  roundRect(x: number, y: number, w: number, h: number, r?: number | DOMPointInit | number[]): void;
 };
 
 function drawRentals(ctx: CanvasRenderingContext2D, t: number, h: boolean) {
@@ -1103,9 +1111,7 @@ function BenefitIcon({ type }: { type: IconType }) {
     <div
       className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300"
       style={{
-        background: hovered ? "rgba(245,196,0,0.2)" : "rgba(245,196,0,0.09)",
-        boxShadow: hovered ? "0 6px 18px -8px rgba(245,196,0,0.5)" : "none",
-        transform: hovered ? "translateY(-1px) scale(1.05)" : "none",
+        background: hovered ? "rgba(245,196,0,0.18)" : "rgba(245,196,0,0.08)",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -1171,10 +1177,6 @@ export default function CreatorsPlatform() {
           0%,100% { transform: scale(1); opacity: .8; }
           50%     { transform: scale(2.4); opacity: 0; }
         }
-        @keyframes scaleX {
-          from { transform: scaleX(0); opacity: 0; }
-          to   { transform: scaleX(1); opacity: 1; }
-        }
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(20px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -1186,10 +1188,8 @@ export default function CreatorsPlatform() {
         id="creators"
         className="relative bg-[#1A1A1A] py-24 px-6 scroll-mt-20 overflow-hidden"
       >
-        {/* Background: growth tree + particles + scanline */}
         <BgCanvas active={inView} />
 
-        {/* Noise */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -1200,29 +1200,9 @@ export default function CreatorsPlatform() {
           }}
         />
 
-        {/* Watermark — "GROWTH" as an engraved outline, echoing the branch
-            canvas itself instead of just labelling the subsidiary name */}
-        <div
-          className="absolute left-0 top-1/2 -translate-y-1/2 font-black leading-none select-none pointer-events-none tracking-tighter hidden lg:block"
-          style={{
-            fontSize: "15vw",
-            zIndex: 1,
-            color: "transparent",
-            WebkitTextStroke: "1px rgba(255,255,255,0.06)",
-            opacity: inView ? 1 : 0,
-            transform: inView
-              ? "translateY(-50%) translateX(0)"
-              : "translateY(-50%) translateX(-40px)",
-            transition: "opacity 1.6s ease 0.3s, transform 1.6s ease 0.3s",
-          }}
-          aria-hidden="true"
-        >
-          GROWTH
-        </div>
-
         <div className="relative max-w-5xl mx-auto" style={{ zIndex: 10 }}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-            {/* ── LEFT — zooms in from the left ── */}
+            {/* LEFT */}
             <div
               className="lg:col-span-5"
               style={{
@@ -1233,8 +1213,8 @@ export default function CreatorsPlatform() {
               }}
             >
               <div className="inline-flex items-center gap-3 mb-6">
-                <span className="text-white/25 text-xs font-mono">03</span>
-                <div className="w-6 h-px bg-white/25" />
+                <span className="text-white/15 text-xs font-mono">03</span>
+                <div className="w-6 h-px bg-white/15" />
                 <span className="text-[#F5C400] text-[10px] font-bold tracking-[0.35em] uppercase">
                   HH Creators Platform
                 </span>
@@ -1252,19 +1232,15 @@ export default function CreatorsPlatform() {
 
               <p className="text-white/55 text-base leading-relaxed mb-4">
                 The Hand Held Creators Platform is a membership community for
-                African content creators at every stage of their journey. We
-                provide tools, training, access to industry networks, and
-                pathways to monetise your work.
+                African content creators at every stage of their journey.
               </p>
-
               <p className="text-white/55 text-base leading-relaxed mb-10">
                 Whether you are just starting or already building your audience
                 — there is a place for you here.
               </p>
 
-              {/* Premium "Coming Soon" treatment */}
+              {/* ── Coming Soon badge — BIGGER ── */}
               <div
-                className="relative inline-flex flex-col gap-3 w-fit"
                 style={{
                   opacity: inView ? 1 : 0,
                   animation: inView
@@ -1273,7 +1249,7 @@ export default function CreatorsPlatform() {
                 }}
               >
                 <div
-                  className="relative inline-flex items-center gap-4 rounded-md px-7 py-5 overflow-hidden"
+                  className="relative inline-flex items-center gap-4 rounded-md px-9 py-6 overflow-hidden"
                   style={{
                     border: "1px solid rgba(245,196,0,0.18)",
                     background:
@@ -1291,7 +1267,7 @@ export default function CreatorsPlatform() {
                     style={{ borderColor: "rgba(245,196,0,0.5)" }}
                   />
 
-                  <span className="relative flex h-2.5 w-2.5">
+                  <span className="relative flex h-3 w-3">
                     <span
                       className="absolute inline-flex h-full w-full rounded-full bg-[#F5C400]"
                       style={{
@@ -1299,27 +1275,27 @@ export default function CreatorsPlatform() {
                           "dotPing 1.8s cubic-bezier(0,0,0.2,1) infinite",
                       }}
                     />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#F5C400]" />
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-[#F5C400]" />
                   </span>
 
                   <div className="flex flex-col">
-                    <span className="text-white font-black text-sm tracking-[0.18em] uppercase">
+                    <span className="text-white font-black text-base tracking-[0.18em] uppercase">
                       Coming Soon
                     </span>
-                    <span className="text-[#F5C400]/50 text-[10px] tracking-[0.1em] uppercase font-mono mt-0.5">
+                    <span className="text-[#F5C400]/50 text-xs tracking-[0.1em] uppercase font-mono mt-0.5">
                       Platform Launch · 2026
                     </span>
                   </div>
                 </div>
 
-                <p className="text-white/30 text-xs leading-relaxed max-w-xs px-1">
+                <p className="text-white/30 text-xs leading-relaxed max-w-xs px-1 mt-3">
                   The platform is currently in development. Stay tuned for the
                   official launch.
                 </p>
               </div>
             </div>
 
-            {/* ── RIGHT — Benefits list ── */}
+            {/* RIGHT — benefits */}
             <div
               className="lg:col-span-7"
               style={{
@@ -1330,7 +1306,7 @@ export default function CreatorsPlatform() {
               }}
             >
               <p
-                className="text-white/35 text-[10px] font-bold tracking-[0.3em] uppercase mb-6 pb-4 border-b border-white/[0.15]"
+                className="text-white/25 text-[10px] font-bold tracking-[0.3em] uppercase mb-6 pb-4 border-b border-white/10"
                 style={{
                   opacity: inView ? 1 : 0,
                   animation: inView ? "fadeUp 0.8s ease 0.4s both" : "none",
@@ -1351,11 +1327,10 @@ export default function CreatorsPlatform() {
                         transform: inView
                           ? "translateX(0)"
                           : "translateX(24px)",
-                        transition: `opacity 0.6s ease ${delay}s, transform 0.6s ease ${delay}s`,
+                        transition: `opacity 0.6s ease ${delay}s,transform 0.6s ease ${delay}s`,
                       }}
                     >
                       <BenefitIcon type={benefit.type} />
-
                       <div className="flex-1">
                         <p className="text-white text-sm font-semibold group-hover:text-[#F5C400] transition-colors duration-300">
                           {benefit.name}
@@ -1371,13 +1346,12 @@ export default function CreatorsPlatform() {
             </div>
           </div>
 
-          {/* Divider */}
           <div
             className="mt-24 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent origin-left"
             style={{
               transform: inView ? "scaleX(1)" : "scaleX(0)",
               opacity: inView ? 1 : 0,
-              transition: "transform 1s ease 1.4s, opacity 1s ease 1.4s",
+              transition: "transform 1s ease 1.4s,opacity 1s ease 1.4s",
             }}
           />
         </div>
