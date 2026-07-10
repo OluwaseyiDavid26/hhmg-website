@@ -216,25 +216,20 @@ export default function Hero() {
 
       <section className="relative min-h-screen bg-[#0D0D0D] overflow-hidden flex flex-col lg:block">
         {/* Video background */}
-        {/* Video background */}
         <div
-          className="absolute inset-0 lg:right-[30%] pointer-events-none"
+          className="absolute top-0 left-0 right-0 h-[65vh] lg:inset-0 lg:h-auto lg:right-[30%] pointer-events-none"
           style={{
             zIndex: 1,
             WebkitMaskImage:
-              "linear-gradient(to right, black 0%, black 80%, transparent 100%)",
+              "linear-gradient(to right, black 0%, black 80%, transparent 100%), linear-gradient(to bottom, black 60%, transparent 100%)",
+            WebkitMaskComposite: "source-in",
             maskImage:
-              "linear-gradient(to right, black 0%, black 80%, transparent 100%)",
+              "linear-gradient(to right, black 0%, black 80%, transparent 100%), linear-gradient(to bottom, black 60%, transparent 100%)",
+            maskComposite: "intersect",
           }}
         >
           <GlobeVideo />
         </div>
-        {/* <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ zIndex: 1 }}
-        >
-          <GlobeVideo />
-        </div> */}
 
         {/* Desktop mosaic */}
         <DesktopMosaic mounted={mounted} />
