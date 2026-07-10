@@ -217,7 +217,7 @@ export default function Hero() {
       <section className="relative min-h-screen bg-[#0D0D0D] overflow-hidden flex flex-col lg:block">
         {/* Video background */}
         <div
-          className="absolute top-0 left-0 right-0 h-[65vh] lg:inset-0 lg:h-auto lg:right-[30%] pointer-events-none"
+          className="absolute top-0 left-0 right-0 h-[52vh] lg:inset-0 lg:h-auto lg:right-[30%] pointer-events-none"
           style={{
             zIndex: 1,
             WebkitMaskImage:
