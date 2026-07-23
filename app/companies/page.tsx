@@ -2,6 +2,8 @@
 import Studios from "@/components/Our-companies/Studios";
 import Rentals from "@/components/Our-companies/Rentals";
 import CreatorsPlatform from "@/components/Our-companies/CreatorsPlatform";
+import StudioSpace from "@/components/Our-companies/StudioSpace";
+
 import ProductionCo from "@/components/Our-companies/ProductionCo";
 
 export default function CompaniesPage() {
@@ -12,6 +14,7 @@ export default function CompaniesPage() {
       <Rentals />
       <CreatorsPlatform />
       <ProductionCo />
+      <StudioSpace />
     </>
   );
 }

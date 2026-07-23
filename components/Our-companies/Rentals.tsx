@@ -644,7 +644,10 @@ export default function Rentals() {
               </span>
             </div>
 
-            <h2 className="font-display text-5xl sm:text-6xl lg:text-[56px] font-black text-white leading-[1.05] tracking-tight mb-6">
+            <h2
+              className="font-display font-black text-white leading-[1.05] tracking-tight mb-6"
+              style={{ fontSize: "clamp(2.5rem, 4vw + 1.5rem, 3.5rem)" }}
+            >
               Rent the gear that
               <br />
               <span
