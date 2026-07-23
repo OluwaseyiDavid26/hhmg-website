@@ -628,6 +628,41 @@ export default function Rentals() {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-16">
           <div
+            className="max-w-2xl"
+            style={{
+              opacity: inView ? 1 : 0,
+              transform: inView ? "translateX(0)" : "translateX(-60px)",
+              transition: "opacity 1.1s ease, transform 1.1s ease",
+            }}
+          >
+            <div className="inline-flex items-center gap-3 mb-7">
+              <span className="text-white/20 text-[10px] font-mono tracking-widest">
+                02 /
+              </span>
+              <span className="text-[#F5C400] text-[10px] font-bold tracking-[0.3em] uppercase">
+                HH Media Rentals
+              </span>
+            </div>
+
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-[56px] font-black text-white leading-[1.05] tracking-tight mb-6">
+              Rent the gear that
+              <br />
+              <span
+                className="text-[#F5C400]"
+                style={{ textShadow: "0 0 80px rgba(245,196,0,0.15)" }}
+              >
+                changes everything.
+              </span>
+            </h2>
+
+            <p className="text-white/50 text-base leading-relaxed">
+              Hand Held Media Rentals gives independent filmmakers, production
+              companies, and content creators access to professional-grade
+              camera, lighting, and audio equipment without the overhead of
+              ownership.
+            </p>
+          </div>
+          {/* <div
             className="max-w-xl"
             style={{
               opacity: inView ? 1 : 0,
@@ -645,25 +680,24 @@ export default function Rentals() {
             </div>
 
             <h2 className="font-display text-5xl sm:text-6xl lg:text-[64px] font-black text-white leading-[0.95] tracking-tight mb-6">
-              The right gear
+              Rent the gear that
               <br />
               <span
                 className="text-[#F5C400]"
                 style={{ textShadow: "0 0 80px rgba(245,196,0,0.15)" }}
               >
-                changes
+                changes everything.
                 <br />
-                everything.
               </span>
             </h2>
 
             <p className="text-white/50 text-base leading-relaxed">
               Hand Held Media Rentals gives independent filmmakers, production
               companies, and content creators access to professional-grade
-              camera, lighting, and audio equipment — without the overhead of
+              camera, lighting, and audio equipment without the overhead of
               ownership.
             </p>
-          </div>
+          </div> */}
 
           {/* Spec pills */}
           <div

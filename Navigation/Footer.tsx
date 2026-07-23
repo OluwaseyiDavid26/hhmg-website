@@ -453,10 +453,10 @@ export default function Footer() {
                   />
                 </svg>
                 <a
-                  href="mailto:hello@hhmg.africa"
+                  href="mailto:hello@hheldmedia.com"
                   className="text-white/40 text-sm hover:text-[#F5C400] transition-colors duration-200"
                 >
-                  hello@hhmg.africa
+                  hello@hheldmedia.com
                 </a>
               </li>
             </ul>

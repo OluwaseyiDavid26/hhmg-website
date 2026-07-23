@@ -427,10 +427,9 @@ export default function Hero() {
                 opacity: mounted ? undefined : 0,
               }}
             >
-              Hand Held Media Group is a Lagos and Abuja-based media holding
-              company — equipping creators, producing original content, and
-              building the infrastructure for African storytelling at its
-              finest.
+              Hand Held Media Group is a Nigeria based media holding company
+              equipping creators, producing original content, and building the
+              infrastructure for African storytelling at its finest.
             </p>
 
             {/* CTAs */}

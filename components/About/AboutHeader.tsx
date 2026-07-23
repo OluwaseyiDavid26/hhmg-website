@@ -550,7 +550,7 @@ export default function AboutHeader() {
             className="text-white/55 text-lg sm:text-xl leading-relaxed max-w-2xl mb-16"
             style={{ animation: "fadeUp 1s ease 0.9s both" }}
           >
-            A holding company for African media — building from the ground up.
+            A company for African media building from the ground up.
           </p>
 
           {/* Meta grid */}
