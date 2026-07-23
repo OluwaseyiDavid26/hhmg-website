@@ -990,7 +990,13 @@ function drawNetwork(ctx: CanvasRenderingContext2D, t: number, h: boolean) {
 }
 
 type CanvasRenderingContext2DRoundRect = CanvasRenderingContext2D & {
-  roundRect(x: number, y: number, w: number, h: number, r?: number | DOMPointInit | number[]): void;
+  roundRect(
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    r?: number | DOMPointInit | number[],
+  ): void;
 };
 
 function drawRentals(ctx: CanvasRenderingContext2D, t: number, h: boolean) {
@@ -1236,7 +1242,7 @@ export default function CreatorsPlatform() {
               </p>
               <p className="text-white/55 text-base leading-relaxed mb-10">
                 Whether you are just starting or already building your audience
-                — there is a place for you here.
+                there is a place for you here.
               </p>
 
               {/* ── Coming Soon badge — BIGGER ── */}

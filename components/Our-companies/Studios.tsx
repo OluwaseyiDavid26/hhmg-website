@@ -553,7 +553,7 @@ export default function Studios() {
             }}
           >
             <p className="text-white/50 text-base leading-relaxed">
-              HHMG's full-service production arm — delivering end-to-end video,
+              HHMG's full-service production arm delivering end-to-end video,
               audio, and content creation for brands, nonprofits, government
               agencies, and media organisations.
             </p>

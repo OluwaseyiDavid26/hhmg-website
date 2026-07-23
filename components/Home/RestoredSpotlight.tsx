@@ -371,7 +371,7 @@ export default function RestoredSpotlight() {
                 >
                   Real stories. Real transformation.{" "}
                   <span className="text-white font-semibold">Restored</span>{" "}
-                  follows individuals whose lives have been radically changed —
+                  follows individuals whose lives have been radically changed
                   and brings their testimony to the screen with{" "}
                   <span className="text-[#F5C400]/75">cinematic care.</span>
                 </p>

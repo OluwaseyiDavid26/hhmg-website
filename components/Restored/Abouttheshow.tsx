@@ -467,8 +467,8 @@ export default function AboutTheShow() {
           style={{ transitionDelay: "220ms" }}
         >
           Every episode follows a real individual whose life has been
-          transformed — told with the intimacy of a conversation and the craft
-          of cinema.
+          transformed told with the intimacy of a conversation and the craft of
+          cinema.
         </p>
 
         {/* Pull quote — a damaged frame restoring itself in real time */}
